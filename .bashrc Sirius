@@ -155,7 +155,6 @@ function debug-cpp() {
 
 function terminal_colour(){
     if [[ $1 == "-bi" ]]; then
-        #export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;214;2;112m\]\u@\[\e[38;2;155;79;150m\]\h:\[\e[38;2;0;56;168m\]\w\[\033[01;00m\]\$ '
         export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;220;10;120m\]\u@\[\e[38;2;180;100;180m\]\h:\[\e[38;2;75;120;255m\]\w\[\033[01;00m\]\$ '
     elif [[ $1 == "-trans" ]]; then
         export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;91;206;250m\]\u\[\e[38;2;245;169;184m\]@\[\e[38;2;255;255;255m\]\h\[\e[38;2;245;169;184m\]:\[\e[38;2;91;206;250m\]\w\[\033[00m\]\$ '
@@ -167,6 +166,10 @@ function terminal_colour(){
         export PS1='${debian_chroot:+($debian_chroot)}\[\033[00m\]\u@\h:\w\$ '
     elif [[ $1 == "-basic" ]]; then
         export PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    elif [[ $1 == "-bi-old" ]]; then
+        export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;214;2;112m\]\u@\[\e[38;2;155;79;150m\]\h:\[\e[38;2;0;56;168m\]\w\[\033[01;00m\]\$ '
+    elif [[ $1 == "-ancom" ]]; then
+        export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;255;0;0m\]\u@\h\[\033[01;00m\]:\[\e[38;2;100;100;100m\]\w\[\033[01;00m\]\$ '
     fi
 }
 
@@ -198,15 +201,23 @@ export GOPATH=${HOME}/go
 export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin
 export PATH=/home/olivia/casacore:${PATH}
 export PATH=/home/olivia/boost_1_88_0:${PATH}
+export PATH=/root/.local/bin:${PATH}
+
+export OSKAR_INC_DIR=/home/olivia/.oskar/OSKAR-2.11.1
+export OSKAR_LIB_DIR=/home/olivia/.oskar/OSKAR-2.11.1
 
 
 # OSKAR Basic Command
 
-function oskar(){
+# OSKAR Basic Command - add to .bashrc
+function oskar_bash() {
 
+    echo "Running custom OSKAR bash command ..."
+
+    cflag=0
     gflag=0
     prog=""
-    file=""
+    ofile=""
     outf="./"
     prevd=$PWD
     
@@ -228,7 +239,7 @@ function oskar(){
                 prog="oskar_imager"
             ;;
             -f | --file)
-                file=$2
+                ofile=$2
                 shift
             ;;
             -o | --output)
@@ -236,8 +247,7 @@ function oskar(){
                 shift
             ;;
             -c | --clean)
-                find ~/.oskar -name '*.log' -type f -delete
-                return 0
+                cflag=1
             ;;
             \?)
                 
@@ -246,14 +256,133 @@ function oskar(){
         shift
     done
 
-    if [ $gflag ]; then
-        file="$prog.ini"
+    if [ $cflag -eq 1 ]; then
+        if [ $gflag -eq 1 ]; then
+            find ~/.oskar -name '*.log' -type f -delete
+        else
+            find . -name '*.log' -type f -delete
+        fi
+        return 0
+    fi
+
+    if [ $gflag -eq 1 ]; then
+        ofile="$prog.ini"
 
         cd ~/.oskar
     fi
 
-    singularity exec --nv --bind $PWD --cleanenv --home $PWD ~/.oskar/OSKAR-2.8.3-Python3.sif $prog $file
+    singularity exec --nv --bind $PWD --cleanenv --home $PWD ~/.oskar/OSKAR-2.8.3-Python3.sif $prog $ofile
 
     cd $prevd
-    cp -rf ~/.oskar/output $outf
 }
+
+# Export hgrep
+alias hgrep="history | grep"
+
+# Created by `pipx` on 2026-02-05 09:15:01
+export PATH="$PATH:/home/olivia/.local/bin"
+
+# GTK Path
+export GTK_PATH=$GTK_PATH:/usr/lib/x86_64-linux-gnu/gtk-2.0/modules
+export GTK_PATH=$GTK_PATH:/usr/lib/x86_64-linux-gnu/gtk-3.0/modules
+export GTK_MODULES=libcanberra-gtk-moduleexport GOPATH=${HOME}/go
+export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin
+
+# Clean Path
+function cleanpath() {
+
+    declare -A SPATH
+    local RET_VAL
+    local A
+
+    local OIFS=$IFS
+    IFS=':'
+    for A in ${PATH}
+    do
+        [ -z "${SPATH[${A}]}" ] || continue
+
+        # By this point no dupe was found
+        SPATH[${A}]=${#SPATH[*]}
+
+        # Reconstruct the $PATH
+        if [ -z "$RET_VAL" ]
+        then RET_VAL="$A"
+        else RET_VAL="${RET_VAL}:${A}"
+        fi
+
+    done
+    IFS=$OIFS
+    PATH=$RET_VAL
+    export PATH
+}
+
+# GOPATH
+export GOPATH=${HOME}/go
+export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin
+
+# Breakpoint code
+alias breakpoint='
+    while read -p"Debugging(Ctrl-d to exit)> " debugging_line
+    do
+        eval "$debugging_line"
+    done'
+
+# Setonix
+alias setonix='ssh ohrw@setonix.pawsey.org.au'
+export SETONIX='ohrw@setonix.pawsey.org.au'
+
+# Quick ssh
+function sshcd () { ssh -t $1 "source ~/.bashrc; cd $2; bash --login"; }
+
+function qssh() {
+    if [[ -f "~/.config/qssh-list.txt" ]]; then
+        touch "~/.config/qssh-list.txt"
+    fi
+
+    if [[ $1 == "--help" ]]; then
+        echo "=================================="
+        echo "Connect to a predefined ssh server."
+        echo "=================================="
+        echo "Usage:"
+        echo "qssh connect [(-n|--name) <host_name> | (-h|--home) <host_address>] [(-p|--pass) <password>]"
+        echo "         [(-d|--dir) <cd_path> | (-l|--loc|--location) <cd_name>]"
+        echo "qssh add-host (-n|--name) <host_name> [(-h|--home) <host_address>] [(-o|--force|--overwrite)]"
+        echo " "
+        echo "qssh add-path (-d|--dir) <cd_path> (-l|--loc|--location) <cd_name>"
+        echo "              [(-n|--name) <host_name> | (-h|--home) <host_address>] [(-o|--force|--overwrite)]"
+        echo "qssh remove ((-n|--name) <host_name> | (-l|--loc|--location) <cd_name>)"
+        echo " "
+        echo "qssh purge"
+        echo " "
+        echo "qssh scp [(-f|--from) [(-n|--name) <host_name> | (-h|--home) <host_address>]"
+        echo "         [(-d|--dir) <cd_path> (-l|--loc|--location) <cd_name>] [(-p|--pass) <password>]]"
+        echo "         [(-t|--to) [(-n|--name) <host_name> | (-h|--home) <host_address>]"
+        echo "         [(-d|--dir) <cd_path> (-l|--loc|--location) <cd_name>] [(-p|--pass) <password>]]"
+        echo "         [(-a|--args|--scp-args) <scp_args>]"
+        echo "=================================="
+        echo "Commands:"
+        echo "connect:                Connect to an SSH host"
+        echo "add-host:               Add/Modify an SSH host to the quick-access name list"
+        echo "add-path:               Add/Modify a named file path on a given SSH host"
+        echo "remove:                 Remove a named host or file path"
+        echo "purge:                  Remove ALL named host or file path"
+        echo "scp:                    Copy files to and from host"
+        echo "help:                   Access the help menu"
+        echo "=================================="
+        echo "Options:"
+        echo "-h --host:              An SSH server host, localhost or '-n' if none provided"
+        echo "-d --dir:               A directory to cd into or copy to/from, CWD or '-l' if none provided"
+        echo "-p --pass:              The password required to connect to the host"
+        echo "-t --to:                File destination, local CWD if none provided"
+        echo "-f --from:              File origin, local CWD if none provided"
+        echo "-n --name               The name of a saved server or to save a server as"
+        echo "-l --loc --location:    The name of a saved path location or to save a path as"
+        echo "-o --force --overwrite: Overwite any existing name setting"
+        echo "-a --args --scp-args:   Any arguments to include in the scp command. Must occur at end of command"
+        echo "=================================="
+    fi
+}
+
+cleanpath
+
+

@@ -120,10 +120,11 @@ alias jpy='jupyter notebook'
 
 # Fun Aliases
 alias penis='echo "CBT also known as Cock and Ball Torture"'
-alias capitalism='echo "Sussy baka crap"'
+alias capitalism='echo "More like Crapitalism amirite!"'
 alias reuben='echo "ERRATA"'
 alias cum='echo "Trans Rights are Human Rights"'
-alias ios='echo "iPhone User"'
+alias ios='echo "iPhone User Moment"'
+alias anarchy='echo "No Gods No Masters!"'
 
 export JAVA_HOME=/usr/lib/jvm/java-16-openjdk-amd64
 

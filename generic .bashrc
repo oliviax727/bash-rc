@@ -147,14 +147,14 @@ export home="/home/ohrw"
 export no_TWD=yes
 
 if [ -n "$no_TWD" ]; then
-	use_TWD=yes
-else
 	use_TWD=
+else
+	use_TWD=yes
 fi
 
 # Change path variable
 function find_TWD(){
-    if [ -n "$use_TWD" ]; then
+    if [ -z "$use_TWD" ]; then
         export CWD="\w"
     else
         export ctop="$(echo $PWD | awk -F/ '{print FS $2}' | tr "\/" "\$")"
@@ -211,6 +211,9 @@ function debug-cpp() {
 
 # Change preset terminal colour
 function terminal_colour(){
+
+    find_TWD
+
     if [[ $1 == "--help" ]]; then
         echo "=================================="
         echo "Change terminal colour. Use --help to see options."

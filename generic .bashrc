@@ -118,6 +118,23 @@ fi
 
 alias jpy='jupyter notebook'
 
+# Fun Aliases
+alias penis='echo "CBT also known as Cock and Ball Torture"'
+alias capitalism='echo "Sussy baka crap"'
+alias reuben='echo "ERRATA"'
+alias cum='echo "Trans Rights are Human Rights"'
+alias ios='echo "iPhone User"'
+
+export JAVA_HOME=/usr/lib/jvm/java-16-openjdk-amd64
+
+# TOMCAT
+alias tomcat_start='sudo systemctl start tomcat'
+alias tomcat_status='sudo systemctl status tomcat'
+alias tomcat_stop='sudo systemctl stop tomcat'
+alias tomcat_restart='sudo systemctl restart tomcat'
+
+alias open_tcp='sudo ufw allow 8080/tcp'
+
 # GCC Compiler Settings
 
 # Run C++ file with g++
@@ -382,6 +399,7 @@ function qssh() {
         echo "=================================="
     fi
 }
+
 
 cleanpath
 

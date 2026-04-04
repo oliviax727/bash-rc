@@ -2,14 +2,14 @@
 
 # OSKAR Generic command
 function oskar_bash() {
-    cflag=0
-    gflag=0
-    bflag=0
-    prog=""
-    ofile=""
-    prevd=$PWD
-    sifs=(${HOME}/.oskar/*.sif)
-    sfile="${sifs[0]}"
+    local cflag=0
+    local gflag=0
+    local bflag=0
+    local prog=""
+    local ofile=""
+    local prevd=$PWD
+    local sifs=(${HOME}/.oskar/*.sif)
+    local sfile="${sifs[0]}"
 
     if [[ ! -d ~/.oskar ]]; then
         mkdir ~/.oskar

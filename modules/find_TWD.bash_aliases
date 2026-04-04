@@ -18,6 +18,6 @@ function set_CWD(){
     fi
 }
 
-PROMPT_COMMAND="${PROMPT_COMMAND}; set_TWD"
+PROMPT_COMMAND="${PROMPT_COMMAND}; set_CWD"
 
 unset force_use_TWD

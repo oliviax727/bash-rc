@@ -7,12 +7,14 @@
 # Define the path to this repository
 export BASHRC_PATH="${HOME}/Desktop/Fun/bashrcs"
 
+# Run program enter bash file
 . "${BASHRC_PATH}/enter.bash"
 
 # ===== CHECK PROFILES ===== #
-device_name=$(hostnamectl | egrep -i "Static hostname" | awk '{print $NF}' || hostname)
+export device_name=$(hostnamectl | egrep -i "Static hostname" | awk '{print $NF}' || hostname)
 
-profile_substrings=( "delll" "sirius" "setonix" )
+# Order of the profiles matter!
+profile_substrings=( "delll" "sirius" "setonix" "test" )
 
 # Structure of a profile file:
 # Other code:    runs on load
@@ -20,14 +22,14 @@ profile_substrings=( "delll" "sirius" "setonix" )
 # profile_alias: runs during alias step
 # profile_rc:    runs during bashrc step
 # profile_exit:  runs on exit
-. "${BASHRC_PATH}/none.bash_profile"
+. "${BASHRC_PATH}/profiles/none.bash_profile"
 
 export BASH_PROFILE="none"
 
 for profile in "${profile_substrings[@]}"; do
     if [[ ${device_name,,} =~ ${profile,,} ]]; then
-        . "${BASHRC_PATH}/${profile}.bash_profile"
-        BASH_PROFILE="${profile}"
+        . "${BASHRC_PATH}/profiles/${profile}.bash_profile"
+        export BASH_PROFILE="${profile}"
         break
     fi
 done
@@ -36,7 +38,8 @@ profile_enter
 
 # ===== RUN ALIASES ===== #
 
-alias_files=($BASHRC_PATH/*.bash_aliases)
+# Run all available bash aliases in main repo directory
+alias_files=($BASHRC_PATH/modules/*.bash_aliases)
 
 for alias in "${alias_files[@]}"; do
     . "${alias}"
@@ -48,17 +51,23 @@ shopt -s expand_aliases
 
 # ===== RUN RCS ===== #
 
-bashrc_files=($BASHRC_PATH/*.bashrc)
+# Run all available .bashrc in main repo directory
+bashrc_files=($BASHRC_PATH/modules/*.bashrc)
 
 for bashrc in "${bashrc_files[@]}"; do
-    echo $bashrc
     . "${bashrc}"
 done
 
+# Run profile-specific bashrc code
 profile_rc
 
 # ===== EXIT ===== #
 
+# Run default exit code
 . "${BASHRC_PATH}/exit.bash"
 
+# Run profile-specific exit code
 profile_exit
+
+# Clean variable space
+unset profile_substrings alias_files bashrc_files

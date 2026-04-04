@@ -2,12 +2,6 @@
 
 bash-rc() {
 
-    # Load repository base.bash file as bashrc
-    function build() {
-        
-
-    }
-
     # Load repository from upstream
     function update() {
         :
@@ -39,6 +33,38 @@ bash-rc() {
         :
     }
 
+    # Load repository base.bash file as bashrc
+    function build() {
+        shift
+        while [ $# -gt 0 ]; do
+            archive_flag=1
+            extra=""
+            case $1 in
+                -k)
+                    archive_flag=0
+                ;;
+                -f)
+                    extra=$(diff "${BASHRC_PATH}/base.bash" "~/.bashrc")
+                ;;
+                -p)
+                    cd-run "${BASHRC_PATH}" "git pull"
+                ;;
+                \?)
+                    echo "'$1' is not a valid option. Use --help or -h to see what options are available."
+                ;;
+            esac
+            shift
+        done
+
+        if [ archive_flag -eq 1 ]; then
+            archive
+        fi
+
+        cp "${BASHRC_PATH}/base.bash" "~/.bashrc"
+
+        printf "\n${extra}\n"
+    }
+
     # Help
     function help() {
         echo "=================================="
@@ -57,17 +83,17 @@ bash-rc() {
         echo " "
         echo "bash-rc test"
         echo " "
-        echo "bash-rc publish [enter|exit|alias|rc]"
+        echo "bash-rc publish (enter|exit|alias|rc) <name>"
         echo " "
         echo "=================================="
         echo "Commands:"
         echo "build                Update the bashrc"
-        echo "update               Update the bashrc"
-        echo "checkout             A"
-        echo "archive              Add/Modify a named file path on a given SSH host"
-        echo "purge                Remove a named host or file path"
-        echo "test                 Remove ALL named host or file path"
-        echo "publish              Copy files to and from host"
+        echo "update               Pull the bash-rc repository from upstream"
+        echo "checkout             Checkout a different bash-rc branch"
+        echo "archive              Archive the current bash-rc file"
+        echo "purge                Remove all archived bashrcs"
+        echo "test                 Run the testing account environment"
+        echo "publish              Publish the current testing module"
         echo "help                 Access the help menu"
         echo "=================================="
         echo "Options:"

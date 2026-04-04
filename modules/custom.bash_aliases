@@ -23,3 +23,6 @@ alias breakpoint='
     do
         eval "$debugging_line"
     done'
+
+# One-Way Diff
+alias diff-diode="diff $1 $2 |grep '^<'|awk '{print $2}')"

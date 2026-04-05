@@ -11,7 +11,6 @@ bash-rc() {
     function checkout() {
         update
         cd-run $BASHRC_PATH "(git fetch && git switch $1) >/dev/null"
-
     }
 
     # Archives current .bashrc from home directory
@@ -26,10 +25,7 @@ bash-rc() {
 
     # Enter testing mode profile
     function test() {
-        while read -p"Debugging(Ctrl-d to exit)> " debugging_line
-        do
-            eval "$debugging_line"
-        done
+        cd-run 'env -i bash HOME=$HOME --noprofile --rcfile "./base.bash"' $BASHRC_PATH
     }
 
     # Publishes a testing module function
@@ -64,8 +60,7 @@ bash-rc() {
         while [ $# -gt 0 ]; do
 
             archive_flag=1
-            append_flag=0
-
+            
             case $1 in
                 -f)
                     archive_flag=0

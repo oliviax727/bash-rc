@@ -5,7 +5,7 @@
 # ===== ENTER ===== #
 
 # Define the path to this repository
-export BASHRC_PATH="${HOME}/Desktop/Fun/bashrcs"
+export BASHRC_PATH="${HOME}/Desktop/Fun/bash-rc"
 
 # Run program enter bash file
 . "${BASHRC_PATH}/enter.bash"

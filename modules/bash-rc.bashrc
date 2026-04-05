@@ -15,7 +15,7 @@ bash-rc() {
 
     # Archives current .bashrc from home directory
     function archive() {
-        cp "${HOME}/.bashrc" "${HOME}/archive-$(filename-date).bashrc"
+        cp "${HOME}/.bashrc" "${BASHRC_PATH}/archive/archive-$(filename-date).bashrc"
     }
 
     # Purges archives
@@ -25,7 +25,7 @@ bash-rc() {
 
     # Enter testing mode profile
     function test() {
-        cd-run 'env -i bash HOME=$HOME --noprofile --rcfile "./base.bash"' $BASHRC_PATH
+        cd-run 'env -i bash HOME=$HOME BASHRC_TEST_MODE=1 --noprofile --rcfile "./base.bash"' $BASHRC_PATH
     }
 
     # Publishes a testing module function
@@ -55,8 +55,6 @@ bash-rc() {
     # Load repository base.bash file as bashrc
     function build() {
 
-        shift
-
         while [ $# -gt 0 ]; do
 
             archive_flag=1
@@ -78,7 +76,7 @@ bash-rc() {
             shift
         done
 
-        if [ archive_flag -eq 1 ]; then
+        if [ $archive_flag -eq 1 ]; then
             archive
         fi
 
@@ -86,7 +84,7 @@ bash-rc() {
 
         cp "${BASHRC_PATH}/base.bash" "${HOME}/.bashrc"
 
-        if [ append_flag -eq 1 ]; then
+        if [ $append_flag -eq 1 ]; then
             diff-diode "${BASHRC_PATH}/base.bash" "${HOME}/.bashrc_temp" >> "~/.bashrc"
         fi
 
@@ -143,6 +141,8 @@ bash-rc() {
         echo "=================================="
     }
 
-    exec $1
+    local sel_cmd=$1
+    shift
+    eval $sel_cmd
 
 }

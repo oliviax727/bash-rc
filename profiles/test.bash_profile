@@ -19,5 +19,6 @@ profile_rc() {
 profile_exit() {
 
     . "${BASHRC_PATH}/test/test_exit.bash"
+    terminal_colour --basic
 
 }

@@ -12,4 +12,6 @@ profile_alias() { :; }
 
 profile_rc() { :; }
 
-profile_exit() { :; }
+profile_exit() {
+    terminal_colour --ancom
+}

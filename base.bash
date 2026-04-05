@@ -13,6 +13,10 @@ export BASHRC_PATH="${HOME}/Desktop/Fun/bash-rc"
 # ===== CHECK PROFILES ===== #
 export device_name=$(hostnamectl | egrep -i "Static hostname" | awk '{print $NF}' || hostname)
 
+if [ ! -z $BASHRC_TEST_MODE ] then
+    device_name="test"
+fi
+
 # Order of the profiles matter!
 profile_substrings=( "delll" "sirius" "setonix" "test" )
 

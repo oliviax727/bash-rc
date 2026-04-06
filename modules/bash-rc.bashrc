@@ -165,7 +165,7 @@ function bash-rc() {
         cp "${BASHRC_PATH}/base.bash" "${HOME}/.bashrc"
 
         if [ "$append_flag" -eq 1 ]; then
-            diff-diode "${BASHRC_PATH}/base.bash" "${HOME}/.bashrc_temp" >> "~/.bashrc"
+            diff-diode "${BASHRC_PATH}/base.bash" "${HOME}/.bashrc_temp" >> "${HOME}/.bashrc"
         fi
 
         rm "${HOME}/.bashrc_temp"

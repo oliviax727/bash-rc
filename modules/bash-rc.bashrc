@@ -22,8 +22,9 @@ function bash-rc() {
 
         if [ ! "${repo_name}" == 'bash-rc' ]; then
             [ $check_null -eq 1 ] && return 0
-
-            bash-rc-check-path -n "${check_path}/bash-rc" && return 0
+ 
+            echo $check_path
+            bash-rc-check-path -n "${check_path}/bash-rc" || return 0
 
             echo -e "${ERROR_TEXT}: chosen \$BASHRC_PATH points to a directory (${check_path}) that does not exist"
             echo "or is not a clone of the bash-rc git repository."
@@ -188,16 +189,17 @@ function bash-rc() {
     function bash-rc-set-path() {
         local set_path="$(realpath -sm $1)"
 
+        if [ -d "${set_path}/bash-rc" ]; then
+            echo -e "${INFORMATION_TEXT}: A sub-directory name bash-rc already exists in specified directory. Using sub-directory as the path instead"
+            set_path="${set_path}/bash-rc"
+        fi
+
         bash-rc-check-path "${set_path}"
 
         if [ $? -eq 0 ]; then
             export BASHRC_PATH="${set_path}"
-            echo -e "${INFORMATION_TEXT}: Updating \$BASHRC_PATH to ${BASHRC_PATH}/bash-rc ..."
+            echo -e "${INFORMATION_TEXT}: Updating \$BASHRC_PATH to ${set_path} ..."
             bash-rc-change-path "${set_path}" "${HOME}/.bashrc"
-        elif [ -d "${clone_parent_dir}/bash-rc" ]; then
-            export BASHRC_PATH="${set_path}/bash-rc"
-            echo -e "${INFORMATION_TEXT}: Updating \$BASHRC_PATH to ${BASHRC_PATH}/bash-rc ..."
-            bash-rc-change-path "${set_path}" "${HOME}/bash-rc/.bashrc"
         else
             return 1
         fi

@@ -128,6 +128,8 @@ function bash-rc() {
     # Load repository base.bash file as bashrc
     function bash-rc-build() {
 
+        bash-rc-change-path  "$(realpath -sm "${BASHRC_PATH}")" "${BASHRC_PATH}/base.bash"
+
         archive_flag=1
         append_flag=0
 

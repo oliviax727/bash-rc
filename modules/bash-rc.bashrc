@@ -26,7 +26,7 @@ bash-rc() {
     # Enter testing mode profile
     function test() {
         export BASHRC_TEST_MODE=1
-        cd-run 'bash --noprofile --rcfile "./base.bash"' $BASHRC_PATH
+        cd-run $BASHRC_PATH 'bash --noprofile --rcfile "./base.bash"'
         export BASHRC_TEST_MODE=
         exec bash
     }
@@ -70,8 +70,11 @@ bash-rc() {
                     append_flag=1
                 ;;
                 -p)
-                    cd-run "${BASHRC_PATH}" "git pull"
+                    update
                 ;;
+                -c)
+                    shift
+                    checkout $1
                 \?)
                     echo "'$1' is not a valid option. Use \`bash-rc (--help|-h)\` to see what options are available."
                 ;;
@@ -92,6 +95,8 @@ bash-rc() {
         fi
 
         rm "~/.bashrc_temp"
+
+        restart
     }
 
     function set-path() {
@@ -112,7 +117,7 @@ bash-rc() {
         echo "Load and alter the .bashrc file from the bash-rc repository."
         echo "=================================="
         echo "Usage:"
-        echo "bash-rc build [-k] [-f] [-p]"
+        echo "bash-rc build [-k] [-f] [-p] [-c <branch_name>]"
         echo " "
         echo "bash-rc update"
         echo " "
@@ -140,7 +145,8 @@ bash-rc() {
         echo "Options:"
         echo "-f                   Do not archive the existing bashrc"
         echo "-k                   Run diff check and keep the difference in the bashrc"
-        echo "-p                   Pull from github remote"
+        echo "-p                   Force pull from github remote"
+        echo "-c                   Checkout branch from git remote"
         echo "=================================="
     }
 

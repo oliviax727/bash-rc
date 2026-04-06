@@ -36,9 +36,9 @@ function cd-run() {
 
     local pwd_save=$PWD
 
-    cd $2
+    cd $1
 
-    eval $1
+    eval $2
 
     cd $pwd_save
 }

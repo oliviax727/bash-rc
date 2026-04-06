@@ -103,14 +103,19 @@ function bash-rc() {
     # Publishes a testing module function
     function bash-rc-publish() {
 
-        local file=("${BASHRC_PATH}/test/test_$1.*")
-        file="${file[0]}"
+        if [ -z $1 ]; then
+            echo "Please provide an option"
+            return 1
+        fi
+
+        local file="$(find "${BASHRC_PATH}/test" -type f -name "test_$1.*")"
         filename=$(basename "$file")
         local extension="${filename##*.}"
         
         case $1 in
             enter|exit)
-                cat "$file" >> "${BASHRC_PATH}/modules/$1.bash"
+                printf "\n\n" >> "${BASHRC_PATH}/$1.bash"
+                cat "$file" >> "${BASHRC_PATH}/$1.bash"
             ;;
             rc|alias)  
                 cp "$file" "${BASHRC_PATH}/modules/$2.${extension}"

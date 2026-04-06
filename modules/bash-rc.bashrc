@@ -1,38 +1,38 @@
 # ===== BASH-RC PACKAGE MODULES ===== #
 
-bash-rc() {
+function bash-rc() {
 
     # Load repository from upstream
-    function update() {
+    function bash-rc-update() {
         cd-run $BASHRC_PATH "(git fetch && git reset --hard origin/main) >/dev/null"
     }
 
     # Checkout different branch in bash-rc file
-    function checkout() {
-        update
-        cd-run $BASHRC_PATH "(git fetch && git switch $1) >/dev/null"
+    function bash-rc-checkout() {
+        bash-rc-update
+        cd-run $BASHRC_PATH "git switch $1 >/dev/null"
     }
 
     # Archives current .bashrc from home directory
-    function archive() {
+    function bash-rc-archive() {
         cp "${HOME}/.bashrc" "${BASHRC_PATH}/archive/archive-$(filename-date).bashrc"
     }
 
     # Purges archives
-    function purge() {
+    function bash-rc-purge() {
         rm "${BASHRC_PATH}/archive"
     }
 
     # Enter testing mode profile
-    function test() {
+    function bash-rc-test() {
         export BASHRC_TEST_MODE=1
         cd-run $BASHRC_PATH 'bash --noprofile --rcfile "./base.bash"'
-        export BASHRC_TEST_MODE=
+        export BASHRC_TEST_MODE=0
         exec bash
     }
 
     # Publishes a testing module function
-    function publish() {
+    function bash-rc-publish() {
 
         local file=("${BASHRC_PATH}/test/test_$1.*")
         file="${file[0]}"
@@ -56,11 +56,12 @@ bash-rc() {
     }
 
     # Load repository base.bash file as bashrc
-    function build() {
+    function bash-rc-build() {
+
+        archive_flag=1
+        append_flag=0
 
         while [ $# -gt 0 ]; do
-
-            archive_flag=1
             
             case $1 in
                 -f)
@@ -75,6 +76,7 @@ bash-rc() {
                 -c)
                     shift
                     checkout $1
+                ;;
                 \?)
                     echo "'$1' is not a valid option. Use \`bash-rc (--help|-h)\` to see what options are available."
                 ;;
@@ -94,12 +96,16 @@ bash-rc() {
             diff-diode "${BASHRC_PATH}/base.bash" "${HOME}/.bashrc_temp" >> "~/.bashrc"
         fi
 
-        rm "~/.bashrc_temp"
+        rm "${HOME}/.bashrc_temp"
+
+        local echo_statement='echo "EXEC_BASE"'
+        local replace_string='echo "EXEC_BASHRC"'
+        sed -i "s/^${echo_statement}.*/${replace_string}/" "${HOME}/.bashrc"
 
         restart
     }
 
-    function set-path() {
+    function bash-rc-set-path() {
 
         local repo_name=$(basename -s .git `git config --get remote.origin.url`)
         local error_text="${ERROR_TEXT}: The path you wish to set as the bashrc directory does not contain the correct .git files."
@@ -112,7 +118,7 @@ bash-rc() {
     }
 
     # Help
-    function help() {
+    function bash-rc-help() {
         echo "=================================="
         echo "Load and alter the .bashrc file from the bash-rc repository."
         echo "=================================="
@@ -152,6 +158,7 @@ bash-rc() {
 
     local sel_cmd=$1
     shift
-    eval $sel_cmd
+
+    eval '"bash-rc-$sel_cmd" $@'
 
 }

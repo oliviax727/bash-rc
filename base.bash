@@ -2,6 +2,9 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+echo "EXEC_BASE"
+echo "BASHRC_TEST_MODE=${BASHRC_TEST_MODE}"
+
 # ===== ENTER ===== #
 
 # Define the path to this repository
@@ -13,7 +16,7 @@ export BASHRC_PATH="${HOME}/Desktop/Fun/bash-rc"
 # ===== CHECK PROFILES ===== #
 export device_name=$(hostnamectl | egrep -i "Static hostname" | awk '{print $NF}' || hostname)
 
-if [ ! -z $BASHRC_TEST_MODE ]; then
+if [ ! -z $BASHRC_TEST_MODE ] && [ $BASHRC_TEST_MODE -eq 1 ]; then
     device_name="test"
 fi
 

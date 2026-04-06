@@ -4,7 +4,7 @@
 alias jpy='jupyter notebook'
 
 # Restart
-alias restart='reset && source ~/.bashrc && clear'
+alias restart='reset && source ${HOME}/.bashrc && clear'
 
 # History Search
 alias hgrep='history | grep'

@@ -8,12 +8,12 @@ function qssh() {
 
     # Switch the QSSH_DEFAULT_KEY_NAME variable
     function qssh-switch() {
-
+        :
     }
 
     # Load a specific configuration file from the environment
     function qssh-load-config() {
-
+        :
     }
 
     if [[ ! -f "${HOME}/.config/qssh-list.json" ]]; then
@@ -27,42 +27,42 @@ function qssh() {
 
     # Connect to qssh host
     function qssh-connect() {
-
+        :
     }
 
     # Add or modify a qssh host
     function qssh-add-host() {
-
+        :
     }
 
     # Add or modify a qssh filepath
     function qssh-add-path() {
-
+        :
     }
     
     # Add or modify an ssh key
     function qssh-add-key() {
-
+        :
     }
 
     # Remove a key, host, or filepath
     function qssh-remove() {
-
+        :
     }
 
     # Purge the qssh config file
     function qssh-purge() {
-        
+        :     
     }
 
     # Secure copy a file to or from a qssh host
     function qssh-scp() {
-        
+        :
     }
 
     # Copy an ssh key to clipboard
     function qssh-copy-key() {
-        
+        :
     }
 
     if [[ ! -f "${HOME}/.ssh/${QSSH_DEFAULT_KEY_NAME}" || ! -f "${HOME}/.ssh/${QSSH_DEFAULT_KEY_NAME}.pub" ]]; then

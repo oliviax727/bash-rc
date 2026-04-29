@@ -1,0 +1,1 @@
+. "${BASHRC_PATH}/profiles/setonix.bash_profile"

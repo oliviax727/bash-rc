@@ -1,7 +1,7 @@
 # ===== CUSTOM COMMANDS - OSKAR ===== #
 
 # OSKAR Generic command
-function oskar_bash() {
+function oskar-bash() {
     local exes=""
     local cflag=0
     local gflag=1
@@ -15,7 +15,7 @@ function oskar_bash() {
         echo "finds in ~/.oskar. If there is no singularity image it will throw an error."
         echo "=================================="
         echo "Usage:"
-        echo "oskar_bash ((-g|--global)|((-l|--local|-s|--sif) <program>)) (-i|--intif|-I|--img|-b|--beam)"
+        echo "oskar-bash ((-g|--global)|((-l|--local|-s|--sif) <program>)) (-i|--intif|-I|--img|-b|--beam)"
         echo "  (-f|--file) <ini_file> [(-c|--clean)]"
         echo "=================================="
         echo "Options:"

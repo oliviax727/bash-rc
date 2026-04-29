@@ -7,6 +7,10 @@ function qssh() {
         touch ~/.config/qssh-list.txt
     fi
 
+    if [[ ! -f ~/.ssh/id_ed25519 || ! -f ~/.ssh/id_ed25519.pub ]]; then
+        echo "no ssh key available!"
+    fi
+
     if [[ $1 == "help" ]]; then
         echo "=================================="
         echo "Connect to a predefined ssh server."
@@ -27,6 +31,7 @@ function qssh() {
         echo "         [(-t|--to) [(-n|--name) <host_name> | (-h|--home) <host_address>]"
         echo "         [(-d|--dir) <cd_path> (-l|--loc|--location) <cd_name>] [(-p|--pass) <password>]]"
         echo "         [(-a|--args|--scp-args) <scp_args>]"
+        echo " "
         echo "=================================="
         echo "Commands:"
         echo "connect                Connect to an SSH host"

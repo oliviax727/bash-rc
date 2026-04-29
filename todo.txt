@@ -1,4 +1,3 @@
-Fill in bash-rc module
 Fill in qssh module
 Fix linting errors
 Copy over Sirius quick scripts

@@ -52,7 +52,7 @@ function bash-rc() {
     function bash-rc-change-path() {
         local check_string='export BASHRC_PATH='
         local replace_string=$(echo "export BASHRC_PATH=\"$1\"" | sed 's/\//\\\//g')
-        sed -i "s/^${check_string}.*/${replace_string}/" $2
+        sed -i '' -e "s/^${check_string}.*/${replace_string}/" $2
     }
 
     # Load repository from upstream

@@ -46,7 +46,9 @@ profile_enter
 alias_files=($BASHRC_PATH/modules/*.bash_aliases)
 
 for alias in "${alias_files[@]}"; do
-    . "${alias}"
+    if [[ ! ":$BASHRC_IGNORE_MODULES:" =~ .*":$alias:".* ]]; then
+        . "${alias}"
+    fi
 done
 
 profile_alias
@@ -59,7 +61,9 @@ shopt -s expand_aliases
 bashrc_files=($BASHRC_PATH/modules/*.bashrc)
 
 for bashrc in "${bashrc_files[@]}"; do
-    . "${bashrc}"
+    if [[ ! ":$BASHRC_IGNORE_MODULES:" =~ .*":$bashrc:".* ]]; then
+        . "${bashrc}"
+    fi
 done
 
 # Run profile-specific bashrc code

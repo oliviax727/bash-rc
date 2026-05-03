@@ -5,5 +5,5 @@ profile_enter() {
 }
 
 profile_exit() {
-    terminal_colour --gay
+    terminal_colour --pride
 }

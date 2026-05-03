@@ -164,7 +164,7 @@ term_col -bi
 # --- set python environment--
 #export MATPLOTLIBRC=$MYPYHOME/matplotlib/matplotlibrc
 #export MPLCONFIGDIR=$MYPYHOME/matplotlib
-export PATH=$PATH:$HOME/.local/bin/
+export PATH="$PATH:$HOME/.local/bin/"
 
 
 # Run C++ file with g++
@@ -198,18 +198,19 @@ function debug-cpp() {
     gdb ./"$1.gdb.out"
 }
 
-export PATH=/Users/ohrw/anaconda3/bin:$PATH
+export PATH="${HOME}/anaconda3/bin:$PATH"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/ohrf/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$('${HOME}/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+echo $_conda_setup
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/home/ohrf/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/ohrf/anaconda3/etc/profile.d/conda.sh"
+    if [ -f "${HOME}/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "${HOME}/anaconda3/etc/profile.d/conda.sh"
     else
-        export PATH="/home/ohrf/anaconda3/bin:$PATH"
+        export PATH="${HOME}/anaconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup

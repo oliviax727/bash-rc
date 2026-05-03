@@ -11,7 +11,7 @@ function bash-rc() {
             shift
         fi
 
-        local check_path=$([ -z $1 ] && echo "$BASHRC_PATH" || echo "$(realpath -sm $1)")
+        local check_path=$([ -z $1 ] && echo "$BASHRC_PATH" || echo "$(evalpath -sm $1)")
 
         local repo_string='[ -d "$check_path" ]
             && [ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" == true ]
@@ -71,7 +71,7 @@ function bash-rc() {
         local check_string='export BASHRC_PATH='
         local replace_string='export BASHRC_PATH='
 
-        local clone_parent_dir="$([ -z $1 ] && echo '.' || echo "$(realpath -sm $1)")"
+        local clone_parent_dir="$([ -z $1 ] && echo '.' || echo "$(evalpath -sm $1)")"
 
         bash-rc-check-path -n "${clone_parent_dir}"
 
@@ -133,7 +133,7 @@ function bash-rc() {
     # Load repository base.bash file as bashrc
     function bash-rc-build() {
 
-        bash-rc-change-path  "$(realpath -sm "${BASHRC_PATH}")" "${BASHRC_PATH}/base.bash"
+        bash-rc-change-path  "$(evalpath -sm "${BASHRC_PATH}")" "${BASHRC_PATH}/base.bash"
 
         archive_flag=1
         append_flag=0
@@ -194,7 +194,7 @@ function bash-rc() {
 
     # Set a new BASHRC_PATH variable
     function bash-rc-set-path() {
-        local set_path="$(realpath -sm $1)"
+        local set_path="$(evalpath -sm $1)"
 
         if [ -d "${set_path}/bash-rc" ]; then
             echo -e "${INFORMATION_TEXT}: A sub-directory name bash-rc already exists in specified directory. Using sub-directory as the path instead"

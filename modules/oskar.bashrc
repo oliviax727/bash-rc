@@ -40,12 +40,12 @@ function oskar-bash() {
                 gflag=1
             ;;
             -l | --local)
-                exes=$(realpath "$2/bin")
+                exes=$(evalpath "$2/bin")
                 gflag=0
                 shift
             ;;
             -s | --sif)
-                exes=$(realpath "$2")
+                exes=$(evalpath "$2")
                 bflag=0
                 shift
             ;;
@@ -59,7 +59,7 @@ function oskar-bash() {
                 prog="oskar_imager"
             ;;
             -f | --file)
-                ofile=$(realpath "$2")
+                ofile=$(evalpath "$2")
                 shift
             ;;
             -c | --clean)

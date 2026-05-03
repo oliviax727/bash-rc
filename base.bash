@@ -5,20 +5,20 @@
 # ===== ENTER ===== #
 
 # Define the path to this repository
-export BASHRC_PATH="/home/ohrf/Desktop/Fun/bash-rc"
+export BASHRC_PATH="/Users/oliviahrwalters/Desktop/Fun/bash-rc"
 
 # Run program enter bash file
 . "${BASHRC_PATH}/enter.bash"
 
 # ===== CHECK PROFILES ===== #
-export device_name=$(hostnamectl | egrep -i "Static hostname" | awk '{print $NF}' || hostname)
+export device_name=$(scutil --get ComputerName || hostnamectl | egrep -i "Static hostname" | awk '{print $NF}' || hostname)
 
 if [ ! -z $BASHRC_TEST_MODE ] && [ $BASHRC_TEST_MODE -eq 1 ]; then
     device_name="test"
 fi
 
 # Order of the profiles matter!
-profile_substrings=( "delll" "sirius" "setonix" "test" )
+profile_substrings=( "delll" "sirius" "setonix" "MacBook" "test" )
 
 # Structure of a profile file:
 # Other code:    runs on load
@@ -31,7 +31,7 @@ profile_substrings=( "delll" "sirius" "setonix" "test" )
 export BASH_PROFILE="none"
 
 for profile in "${profile_substrings[@]}"; do
-    if [[ ${device_name,,} =~ ${profile,,} ]]; then
+    if [[ "$device_name" =~ .*"$profile".* ]]; then
         . "${BASHRC_PATH}/profiles/${profile}.bash_profile"
         export BASH_PROFILE="${profile}"
         break

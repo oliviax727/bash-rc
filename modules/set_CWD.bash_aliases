@@ -13,7 +13,7 @@ function set_CWD(){
     else
         export ctop="$(echo $PWD | awk -F/ '{print FS $2}' | tr "\/" "\$")"
         export TWD=$(eval "echo $(echo $PWD | awk -F/ '{print FS $2}' | tr "\/" "\$")")
-        relpath=$(realpath -s --relative-to=$TWD $PWD)
+        relpath=$(evalpath -sm --relative-to=$TWD $PWD)
         export CWD="$(([[ $relpath == '.' ]] && echo "$ctop") || ([[ $relpath =~ '..' ]] && echo "$PWD") || echo "$ctop/$relpath")"
     fi
 }

@@ -36,7 +36,7 @@ function terminal_colour(){
     elif [[ $1 == "--ancom" ]]; then
         export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;255;0;0m\]\u@\h\[\033[01;00m\]:\[\e[38;2;100;100;100m\]'"$CWD"'\[\033[01;00m\]\$ '
     elif [[ $1 == "--pride" ]]; then
-        export PS1='${debian_chroot:+($debian_chrooreset}\[\e[0;91m\]\u\[\e[38;5;166m\]@\[\e[0;93m\]\h\[\e[0;92m\]:\[\e[0;94m\]'"$CWD"'\[\e[38;5;57m\]\$\[\033[01;00m\] '
+        export PS1='${debian_chroot:+($debian_chrooreset}\[\e[0;91m\]\u\[\e[38;5;166m\]@\[\e[0;93m\]\h\[\e[0;92m\]:\[\e[0;94m\]'"$CWD"'\[\e[38;5;165m\]\$\[\033[01;00m\] '
     elif [[ $1 == "--gay" ]]; then
         export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;229;0;0m\]\u\[\e[38;2;255;141;0m\]@\[\e[38;2;255;238;0m\]\h\[\e[38;2;2;129;33m\]:\[\e[38;2;0;76;255m\]'"$CWD"'\[\e[38;2;119;0;136m\]\$\[\033[01;00m\] '
     else

@@ -14,12 +14,12 @@ source modules/bash-rc.bashrc
 if [ -z "$1" ]; then
     read -p "Would you like to install the clean version? (y/[n])? " response
 else
-    response="$1"
+    response="$(echo $1 | cut -c 2-)"
 fi
 
 version="main"
 
-if [ "$response" == "-y" ]; then
+if [ "$response" == "y" ]; then
     version="clean"
 fi
 

@@ -206,7 +206,7 @@ function bash-rc() {
         if [ $? -eq 0 ]; then
             export BASHRC_PATH="${set_path}"
             echo -e "${INFORMATION_TEXT}: Updating \$BASHRC_PATH to ${set_path} ..."
-            bash-rc-change-path "${set_path}" "${HOME}/.bashrc"
+            bash-rc-change-path "${set_path}" "${BASHRC_PATH}/base.bash"
         else
             return 1
         fi

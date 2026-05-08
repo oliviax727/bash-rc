@@ -1,5 +1,6 @@
 # ===== CUSTOM COMMANDS - GIT HELPER COMMANDS AND AUTOMATION ===== #
 
+# Propagate a single commit throughout all of the branches
 function git-propagate() {
 
     git stash

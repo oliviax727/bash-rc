@@ -23,7 +23,7 @@ if [ "$response" == "-y" ]; then
     version="clean"
 fi
 
-echo "export BASHRC_PATH=" >> .bashrc
+echo "export BASHRC_PATH=" >> "${HOME}/.bashrc"
 
 bash-rc-set-path $BASHRC_PATH
 

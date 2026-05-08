@@ -9,7 +9,7 @@ fi
 # Change path variable
 function set_CWD(){
     if [ -z "$set_TWD" ]; then
-        export CWD="\w"
+        export CWD="$PWD"
     else
         export ctop="$(echo $PWD | awk -F/ '{print FS $2}' | tr "\/" "\$")"
         export TWD=$(eval "echo $(echo $PWD | awk -F/ '{print FS $2}' | tr "\/" "\$")")

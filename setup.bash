@@ -11,14 +11,16 @@ shopt -s expand_aliases
 
 source modules/bash-rc.bashrc
 
-bash-rc-set-path $BASHRC_PATH
-
-read -p "Would you like to install the clean version? (y/[n])? " response
+if [ -z "$1" ]; then
+    read -p "Would you like to install the clean version? (y/[n])? " response
+else
+    response=$(echo "$1" | cut -c 1- )
+fi
 
 version="main"
 
-if [ "$response" -eq "y" ]; then
+if [ "$response" == "y" ]; then
     version="clean"
 fi
 
-bash-rc build -k "$(git branch --list "release/*-$version")"
+bash-rc build -k -c "$(git branch --list "release/*-$version")"

@@ -26,3 +26,7 @@ export GTK_PATH=$GTK_PATH:/usr/lib/x86_64-linux-gnu/gtk-2.0/modules
 export GTK_PATH=$GTK_PATH:/usr/lib/x86_64-linux-gnu/gtk-3.0/modules
 export GTK_MODULES=libcanberra-gtk-moduleexport GOPATH=${HOME}/go
 export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin
+
+# Pylint Path
+export PYLINT_VENV_PATH=.venv:.virtualenv
+export PYTHONPATH=/usr/bin/python3:$PWD/.venv/bin/python3

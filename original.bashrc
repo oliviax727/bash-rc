@@ -131,13 +131,6 @@ alias open_tcp='sudo ufw allow 8080/tcp'
 # Jupyter fuck
 alias jpy='jupyter notebook'
 
-# fun Aliases
-alias penis='echo "CBT also known as Cock and Ball Torture"'
-alias capitalism='echo "Sussy baka crap"'
-alias reuben='echo "ERRATA"'
-alias cum='echo "Trans Rights are Human Rights"'
-alias ios='echo "iPhone User"'
-
 # CODE FROM WSL
 function terminal_colour(){
     if [[ $1 == "-bi" ]]; then

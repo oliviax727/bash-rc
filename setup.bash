@@ -23,4 +23,8 @@ if [ "$response" == "-y" ]; then
     version="clean"
 fi
 
+echo "export BASHRC_PATH=" >> .bashrc
+
+bash-rc-set-path $BASHRC_PATH
+
 bash-rc build -c "$(git branch -r --list "origin/release/*-$version" | cut -c 10-)"

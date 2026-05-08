@@ -25,6 +25,6 @@ fi
 
 echo "export BASHRC_PATH=" >> "${HOME}/.bashrc"
 
-bash-rc-set-path $BASHRC_PATH
-
 bash-rc build -c "$(git branch -r --list "origin/release/*-$version" | cut -c 10-)"
+
+bash-rc-set-path $BASHRC_PATH

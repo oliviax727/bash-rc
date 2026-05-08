@@ -50,10 +50,10 @@ function bash-rc() {
 
     # Replace the bashrc or base file's BASHRC_PATH variable setting
     function bash-rc-change-path() {
-        local check_string='export BASHRC_PATH='
-        local replace_string=$(echo "export BASHRC_PATH=\"$1\"" | sed 's/\//\\\//g')
-        
-        sed -i '' -e "s/^${check_string}.*/${replace_string}/" $2
+        check_string='export BASHRC_PATH='
+        replace_string=$(echo "export BASHRC_PATH=\"$1\"" | sed 's/\//\\\//g')
+
+        sed -i -e "s/^${check_string}.*/${replace_string}/" $2
     }
 
     # Load repository from upstream

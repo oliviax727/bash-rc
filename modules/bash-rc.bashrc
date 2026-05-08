@@ -52,6 +52,7 @@ function bash-rc() {
     function bash-rc-change-path() {
         local check_string='export BASHRC_PATH='
         local replace_string=$(echo "export BASHRC_PATH=\"$1\"" | sed 's/\//\\\//g')
+        
         sed -i '' -e "s/^${check_string}.*/${replace_string}/" $2
     }
 
@@ -206,7 +207,7 @@ function bash-rc() {
         if [ $? -eq 0 ]; then
             export BASHRC_PATH="${set_path}"
             echo -e "${INFORMATION_TEXT}: Updating \$BASHRC_PATH to ${set_path} ..."
-            bash-rc-change-path "${set_path}" "${BASHRC_PATH}/base.bash"
+            bash-rc-change-path "${set_path}" "${HOME}/.bashrc"
         else
             return 1
         fi

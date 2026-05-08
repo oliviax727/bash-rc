@@ -5,20 +5,29 @@
 # ===== ENTER ===== #
 
 # Define the path to this repository
-export BASHRC_PATH="/Users/oliviahrwalters/Desktop/Fun/bash-rc"
+export BASHRC_PATH="/home/olivia/Desktop/Casual/bash-rc"
 
 # Run program enter bash file
 . "${BASHRC_PATH}/enter.bash"
 
 # ===== CHECK PROFILES ===== #
-export device_name=$(scutil --get ComputerName || hostnamectl | egrep -i "Static hostname" | awk '{print $NF}' || hostname)
+
+# Various operating systems use different hostnames, attempt each one
+
+if command -v scutil >/dev/null 2>&1; then
+    export device_name=$(scutil --get ComputerName) # MacOS
+elif command -v hostnamectl >/dev/null 2>&1; then
+    export device_name=$(hostnamectl | egrep -i "Static hostname" | awk '{print $NF}') # Linux
+elif command -v hostname >/dev/null 2>&1; then
+    export device_name=$(hostname) # Fallback
+fi
 
 if [ ! -z $BASHRC_TEST_MODE ] && [ $BASHRC_TEST_MODE -eq 1 ]; then
     device_name="test"
 fi
 
 # Order of the profiles matter!
-profile_substrings=( "delll" "sirius" "setonix" "MacBook" "test" )
+profile_substrings=( "delll" "Sirius" "setonix" "nid" "MacBook" "test" )
 
 # Structure of a profile file:
 # Other code:    runs on load

@@ -14,13 +14,13 @@ source modules/bash-rc.bashrc
 if [ -z "$1" ]; then
     read -p "Would you like to install the clean version? (y/[n])? " response
 else
-    response=$(echo "$1" | cut -c 1- )
+    response="$1"
 fi
 
 version="main"
 
-if [ "$response" == "y" ]; then
+if [ "$response" == "-y" ]; then
     version="clean"
 fi
 
-bash-rc build -k -c "$(git branch --list "release/*-$version")"
+bash-rc build -c "$(git branch -r --list "origin/release/*-$version" | cut -c 10-)"

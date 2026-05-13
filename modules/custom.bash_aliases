@@ -34,13 +34,13 @@ function diff-diode() {
 # CD Run
 function cd-run() {
 
-    local pwd_save=$PWD
+    local pwd_save="$PWD"
 
-    cd $1
+    cd "$1"
 
     eval $2
 
-    cd $pwd_save
+    cd "$pwd_save"
 }
 
 # Filename format friendly time

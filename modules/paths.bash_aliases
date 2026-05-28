@@ -24,7 +24,8 @@ export PATH="$PATH:${HOME}/.local/bin"
 # GTK Path
 export GTK_PATH=$GTK_PATH:/usr/lib/x86_64-linux-gnu/gtk-2.0/modules
 export GTK_PATH=$GTK_PATH:/usr/lib/x86_64-linux-gnu/gtk-3.0/modules
-export GTK_MODULES=libcanberra-gtk-moduleexport GOPATH=${HOME}/go
+export GTK_MODULES=libcanberra-gtk-module
+export GOPATH=${HOME}/go
 export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin
 
 # Pylint Path

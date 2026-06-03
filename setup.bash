@@ -6,7 +6,7 @@ mkdir -p archive
 
 source enter.bash
 source modules/custom.bash_aliases
-source modules/evalpath.bash_aliases
+source modules/path_manager.bash_aliases
 shopt -s expand_aliases
 
 source modules/bash-rc.bashrc

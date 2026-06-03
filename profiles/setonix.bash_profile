@@ -2,7 +2,8 @@ profile_enter() {
     # Quick-Jump/CD
     export software="/software/projects/mwaeor/ohrw"
     export scratch="/scratch/mwaeor/ohrw"
-    export home="/home/ohrw"
+
+    export QUICK_JUMP_VARS="software:scratch"
 
     # Uncomment if using default paths is prefered
     export force_set_TWD=yes

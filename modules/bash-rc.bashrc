@@ -53,7 +53,7 @@ function bash-rc() {
         check_string='export BASHRC_PATH='
         replace_string=$(echo "export BASHRC_PATH=\"$1\"" | sed 's/\//\\\//g')
 
-        sed -i -e "s/^${check_string}.*/${replace_string}/" $2
+        sed -i '' -e "s/^${check_string}.*/${replace_string}/g" "$2"
     }
 
     # Load repository from upstream
@@ -80,8 +80,9 @@ function bash-rc() {
             cd-run  "${clone_parent_dir}" '
             (git clone git@github.com:oliviax727/bash-rc.git
             || git clone https://github.com/oliviax727/bash-rc.git)
-            && bash-rc-change-path "$clone_parent_dir" "./bash-rc/base.bash"
-            || (echo -e "${ERROR_TEXT}: Something went wrong when trying to clone the repo."
+            && chmod +x "${clone_parent_dir}/bash-rc/setup.bash"
+            && "${clone_parent_dir}/bash-rc/setup.bash"
+            || (echo -e "${ERROR_TEXT}: Something went wrong when trying to clone and build the repo."
             && return 1)'
         else
             echo -e "${ERROR_TEXT}: Repository or directory already exists here!"
@@ -134,7 +135,9 @@ function bash-rc() {
     # Load repository base.bash file as bashrc
     function bash-rc-build() {
 
-        bash-rc-change-path  "$(evalpath -sm "${BASHRC_PATH}")" "${BASHRC_PATH}/base.bash"
+        cp "${BASHRC_PATH}/base.bash" "${BASHRC_PATH}/ready.bashrc"
+
+        bash-rc-change-path  "$(evalpath -sm "${BASHRC_PATH}")" "${BASHRC_PATH}/ready.bashrc"
 
         archive_flag=1
         append_flag=0
@@ -166,15 +169,16 @@ function bash-rc() {
             bash-rc-archive
         fi
 
-        cp "${HOME}/.bashrc" "${HOME}/.bashrc_temp"
+        cp "${HOME}/.bashrc" "${HOME}/temp.bashrc"
 
-        cp "${BASHRC_PATH}/base.bash" "${HOME}/.bashrc"
+        cp "${BASHRC_PATH}/ready.bashrc" "${HOME}/.bashrc"
 
         if [ "$append_flag" -eq 1 ]; then
-            diff-diode "${HOME}/.bashrc_temp" "${BASHRC_PATH}/base.bash" >> "${HOME}/.bashrc"
+            echo "" >> "${HOME}/.bashrc"
+            diff-diode "${HOME}/temp.bashrc" "${BASHRC_PATH}/ready.bashrc" >> "${HOME}/.bashrc"
         fi
 
-        rm "${HOME}/.bashrc_temp"
+        rm "${HOME}/temp.bashrc"
 
     }
 

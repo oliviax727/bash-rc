@@ -19,10 +19,12 @@ alias open_tcp='sudo ufw allow 8080/tcp'
 
 # Breakpoint code
 alias breakpoint='
-    while read -p"Debugging(Ctrl-d to exit)> " debugging_line
+    echo "Entering debugging (Ctrl-d to exit):"
+    while read -p"Debugging> " debugging_line
     do
         eval "$debugging_line"
-    done'
+    done
+    echo -e "\nExiting debugging."'
 
 # One-Way Diff
 function diff-diode() {

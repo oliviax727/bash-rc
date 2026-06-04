@@ -5,7 +5,7 @@
 # ===== ENTER ===== #
 
 # Define the path to this repository
-export BASHRC_PATH="/Users/oliviahrwalters/Desktop/Fun/bash-rc"
+export BASHRC_PATH=""
 
 # Run program enter bash file
 . "${BASHRC_PATH}/enter.bash"
@@ -88,4 +88,3 @@ profile_exit
 
 # Clean variable space
 unset profile_substrings alias_files bashrc_files
-

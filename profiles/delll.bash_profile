@@ -1,4 +1,6 @@
-profile_enter() { :; }
+profile_enter() { 
+    export BASHRC_IGNORE_MODULES=$BASHRC_IGNORE_MODULES:$BASHRC_PATH/modules/boot-arch.bashrc; 
+}
 
 profile_alias() {
     :

@@ -7,6 +7,8 @@ profile_enter() {
 
     # Uncomment if using default paths is prefered
     export force_set_TWD=yes
+
+    export BASHRC_IGNORE_MODULES=$BASHRC_IGNORE_MODULES:$BASHRC_PATH/modules/boot-arch.bashrc
 }
 
 profile_alias() { :; }

@@ -15,7 +15,8 @@ function terminal_colour(){
         echo "Available Colours:"
         echo "Default:    --basic --blank"
         echo "Monochrome: --green --blue --yellow"
-        echo "Pride/Id:   --bi --trans --bi-old --ancom --gay --pride"
+        echo "Pride:      --bi --trans --bi-old --demi --gay --pride"
+        echo "Political:  --aneco --ancom"
         echo "=================================="
     elif [[ $1 == "--bi" ]]; then
         export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;220;10;120m\]\u@\[\e[38;2;180;100;180m\]\h:\[\e[38;2;75;120;255m\]$CWD\[\033[01;00m\]\$ '
@@ -39,6 +40,10 @@ function terminal_colour(){
         export PS1='${debian_chroot:+($debian_chrooreset}\[\e[0;91m\]\u\[\e[38;5;166m\]@\[\e[0;93m\]\h\[\e[0;92m\]:\[\e[0;94m\]$CWD\[\e[38;5;165m\]\$\[\033[01;00m\] '
     elif [[ $1 == "--gay" ]]; then
         export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;229;0;0m\]\u\[\e[38;2;255;141;0m\]@\[\e[38;2;255;238;0m\]\h\[\e[38;2;2;129;33m\]:\[\e[38;2;0;76;255m\]$CWD\[\e[38;2;119;0;136m\]\$\[\033[01;00m\] '
+    elif [[ $1 == "--demi" ]]; then
+        export PS1='\[\e[38;2;127;127;127m\]${debian_chroot:+($debian_chrooreset}\[\e[38;2;185;185;185m\]\u\[\e[38;2;255;170;203m\]@\[\e[38;2;255;255;255m\]\h\[\e[38;2;255;170;203m\]:\[\e[38;2;185;185;185m\]$CWD\[\e[38;2;127;127;127m\]\$\[\033[01;00m\] '
+    elif [[ $1 == "--aneco" ]]; then
+        export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;4;221;33m\]\u@\h\[\033[01;00m\]:\[\e[38;2;100;100;100m\]$CWD\[\033[01;00m\]\$ '
     else
         echo "$1 is not a valid option. Here's the help menu:"
         terminal_colour --help

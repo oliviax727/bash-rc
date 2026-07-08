@@ -17,7 +17,7 @@ export BASHRC_PATH=""
 if command -v scutil >/dev/null 2>&1; then
     export device_name=$(scutil --get ComputerName) # MacOS
 elif command -v hostnamectl >/dev/null 2>&1; then
-    export device_name=$(hostnamectl | egrep -i "Static hostname" | awk '{print $NF}') # Linux
+    export device_name=$(hostnamectl | grep -E -i "Static hostname" | awk '{print $NF}') # Linux
 elif command -v hostname >/dev/null 2>&1; then
     export device_name=$(hostname) # Fallback
 fi

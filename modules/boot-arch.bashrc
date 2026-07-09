@@ -122,7 +122,7 @@ function admiral() {
 
             admiral-unmount-target "$CHROOT_DIR" "$mounted_root" "$mounted_efi" 1
             
-            trap - EXIT INT TERM
+            trap - RETURN INT TERM
             return "$rc"
         }
         
@@ -196,7 +196,7 @@ function admiral() {
         admiral-mount-target "$ROOT_DEV" "$EFI_DEV" "$CHROOT_DIR" 1 || return 1
         mounted_root="$ADMIRAL_MOUNTED_ROOT"
         mounted_efi="$ADMIRAL_MOUNTED_EFI"
-        trap cleanup_admiral EXIT INT TERM
+        trap cleanup_admiral RETURN INT TERM
         
         if sudo chroot "$CHROOT_DIR" id -u "$TARGET_USER" >/dev/null 2>&1; then
             sudo chroot "$CHROOT_DIR" /bin/bash -c 'user="$1"; home="$(getent passwd "$user" | cut -d: -f6)"; [ -n "$home" ] || home="/home/$user"; cd "$home" || cd /; exec /bin/su "$user"' _ "$TARGET_USER"
@@ -225,7 +225,7 @@ function admiral() {
 
             admiral-unmount-target "$CHROOT_DIR" "$mounted_root" "$mounted_efi" 0
 
-            trap - EXIT INT TERM
+            trap - RETURN INT TERM
             return "$rc"
         }
 
@@ -321,7 +321,7 @@ function admiral() {
         admiral-mount-target "$ROOT_DEV" "$EFI_DEV" "$CHROOT_DIR" 0 || return 1
         mounted_root="$ADMIRAL_MOUNTED_ROOT"
         mounted_efi="$ADMIRAL_MOUNTED_EFI"
-        trap cleanup_admiral_mcp EXIT INT TERM
+        trap cleanup_admiral_mcp RETURN INT TERM
 
         sudo cp "${cp_opts[@]}" -- "$src" "$dst"
     }

@@ -30,6 +30,11 @@ function admiral() {
         ADMIRAL_MOUNTED_ROOT=0
         ADMIRAL_MOUNTED_EFI=0
 
+        if [[ -z "$chroot_dir" ]] || [[ "$chroot_dir" == "/" ]] || [[ "$chroot_dir" != /mnt/* ]]; then
+            echo "admiral: refusing unsafe mount target '$chroot_dir'"
+            return 1
+        fi
+
         sudo -v || return 1
         sudo mkdir -p "$chroot_dir" || return 1
 
@@ -73,6 +78,11 @@ function admiral() {
         local bind_runtime="$4"
         local p
 
+        if [[ -z "$chroot_dir" ]] || [[ "$chroot_dir" == "/" ]] || [[ "$chroot_dir" != /mnt/* ]]; then
+            echo "admiral: refusing unsafe unmount target '$chroot_dir'"
+            return 1
+        fi
+
         if [[ "$bind_runtime" -eq 1 ]]; then
             for p in run sys proc dev; do
                 mountpoint -q "$chroot_dir/$p" && sudo -n umount -R -l "$chroot_dir/$p" 2>/dev/null || true
@@ -115,15 +125,11 @@ function admiral() {
         local TARGET_USER="admiral"
         local mounted_root=0
         local mounted_efi=0
+        local cmd_rc=0
         
         cleanup_admiral() {
-            local rc=$?
             set +e
-
             admiral-unmount-target "$CHROOT_DIR" "$mounted_root" "$mounted_efi" 1
-            
-            trap - RETURN INT TERM
-            return "$rc"
         }
         
         while [[ $# -gt 0 ]]; do
@@ -196,14 +202,18 @@ function admiral() {
         admiral-mount-target "$ROOT_DEV" "$EFI_DEV" "$CHROOT_DIR" 1 || return 1
         mounted_root="$ADMIRAL_MOUNTED_ROOT"
         mounted_efi="$ADMIRAL_MOUNTED_EFI"
-        trap cleanup_admiral RETURN INT TERM
         
         if sudo chroot "$CHROOT_DIR" id -u "$TARGET_USER" >/dev/null 2>&1; then
             sudo chroot "$CHROOT_DIR" /bin/bash -c 'user="$1"; home="$(getent passwd "$user" | cut -d: -f6)"; [ -n "$home" ] || home="/home/$user"; cd "$home" || cd /; exec /bin/su "$user"' _ "$TARGET_USER"
+            cmd_rc=$?
         else
             echo "User '$TARGET_USER' not found on target OS; opening root shell in chroot."
             sudo chroot "$CHROOT_DIR" /bin/bash
+            cmd_rc=$?
         fi
+
+        cleanup_admiral
+        return "$cmd_rc"
     }
     
     function admiral-mcp() {
@@ -218,15 +228,12 @@ function admiral() {
         local dst=""
         local cp_opts=()
         local path_args=()
+        local cmd_rc=0
 
         cleanup_admiral_mcp() {
-            local rc=$?
             set +e
 
             admiral-unmount-target "$CHROOT_DIR" "$mounted_root" "$mounted_efi" 0
-
-            trap - RETURN INT TERM
-            return "$rc"
         }
 
         while [[ $# -gt 0 ]]; do
@@ -321,9 +328,12 @@ function admiral() {
         admiral-mount-target "$ROOT_DEV" "$EFI_DEV" "$CHROOT_DIR" 0 || return 1
         mounted_root="$ADMIRAL_MOUNTED_ROOT"
         mounted_efi="$ADMIRAL_MOUNTED_EFI"
-        trap cleanup_admiral_mcp RETURN INT TERM
 
         sudo cp "${cp_opts[@]}" -- "$src" "$dst"
+        cmd_rc=$?
+
+        cleanup_admiral_mcp
+        return "$cmd_rc"
     }
     
     # Help

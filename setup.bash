@@ -10,7 +10,7 @@ shopt -s expand_aliases
 source modules/bash-rc.bashrc
 
 if [ -z "$1" ]; then
-    read -p "Would you like to install the clean version? (y/[n])? " response
+    read -p "Would you like to install the unstable version? (y/[n])? " response
 else
     response="$(echo $1 | cut -c 2-)"
 fi
@@ -18,9 +18,9 @@ fi
 version="main"
 
 if [ "$response" == "y" ]; then
-    version="clean"
+    bash-rc build -p -c "$(git branch -r --list "origin/main" | cut -c 10-)"
+else
+    bash-rc build
 fi
-
-bash-rc build -p -c "$(git branch -r --list "origin/$version" | cut -c 10-)"
 
 reset && source ~/.bashrc

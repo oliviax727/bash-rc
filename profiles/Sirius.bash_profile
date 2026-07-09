@@ -25,7 +25,7 @@ profile_exit() {
     fi
 
     # If LM use aneco colours
-    if  [[ "$static_hostname" == "SiriusA" ]] || \
+    if  [[ "$static_hostname" == "SiriusB" ]] || \
         [[ "$os_name" =~ .*"Linux Mint".* ]]
     then
         terminal_colour --aneco

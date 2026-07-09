@@ -16,10 +16,12 @@ export BASHRC_PATH=""
 
 if command -v scutil >/dev/null 2>&1; then
     export device_name=$(scutil --get ComputerName) # MacOS
-elif command -v hostnamectl >/dev/null 2>&1; then
-    export device_name=$(hostnamectl | grep -E -i "Static hostname" | awk '{print $NF}') # Linux
-elif command -v hostname >/dev/null 2>&1; then
-    export device_name=$(hostname) # Fallback
+elif command -v hostnamectl >/dev/null 2>&1 && [[ -d /run/systemd/system ]]; then
+    export device_name=$(hostnamectl --static 2>/dev/null) # Linux with systemd
+fi
+
+if [[ -z "$device_name" ]] && command -v hostname >/dev/null 2>&1; then
+    export device_name=$(hostname 2>/dev/null) # Generic fallback
 fi
 
 if [ ! -z $BASHRC_TEST_MODE ] && [ $BASHRC_TEST_MODE -eq 1 ]; then

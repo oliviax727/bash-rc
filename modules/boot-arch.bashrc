@@ -75,16 +75,16 @@ function admiral() {
 
         if [[ "$bind_runtime" -eq 1 ]]; then
             for p in run sys proc dev; do
-                mountpoint -q "$chroot_dir/$p" && sudo umount -R -l "$chroot_dir/$p"
+                mountpoint -q "$chroot_dir/$p" && sudo -n umount -R -l "$chroot_dir/$p" 2>/dev/null || true
             done
         fi
 
         if [[ "$mounted_efi" -eq 1 ]]; then
-            sudo umount -l "$chroot_dir/boot/efi"
+            sudo -n umount -l "$chroot_dir/boot/efi" 2>/dev/null || true
         fi
 
         if [[ "$mounted_root" -eq 1 ]]; then
-            sudo umount -l "$chroot_dir"
+            sudo -n umount -l "$chroot_dir" 2>/dev/null || true
         fi
     }
 

@@ -21,6 +21,6 @@ if [ "$response" == "y" ]; then
     version="clean"
 fi
 
-bash-rc build -k -p -c "$(git branch -r --list "origin/$version" | cut -c 10-)"
+bash-rc build -p -c "$(git branch -r --list "origin/$version" | cut -c 10-)"
 
 reset && source ~/.bashrc

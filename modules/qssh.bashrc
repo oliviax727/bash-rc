@@ -4,55 +4,54 @@ function sshcd () { ssh -t $1 "source ~/.bashrc; cd $2; bash --login"; }
 
 function qssh() {
 
-    local QSSH_DEFAULT_KEY_NAME="id_ed25519"
-
-    # Switch the QSSH_DEFAULT_KEY_NAME variable
-    function qssh-switch() {
-        :
-    }
+    local CONFIG_FILE="${HOME}/.config/qssh.csv"
 
     # Load a specific configuration file from the environment
-    function qssh-load-config() {
+    function qssh-import() {
         :
     }
 
-    if [[ ! -f "${HOME}/.config/qssh-list.json" ]]; then
+    if [[ ! -f "${CONFIG_FILE}" ]]; then
         echo "${INFORMATION_TEXT}: No pre-existing configuration file was found. This means qssh will operate under"
-        echo "the default settings. Creating a new config file: ${HOME}/.config/qssh-list.json."
+        echo "the default settings. Creating a new empty config file: ${CONFIG_FILE}"
         
-        touch "${HOME}/.config/qssh-list.txt"
+        touch "${CONFIG_FILE}"
     else
-        qssh-load-config "${HOME}/.config/qssh-list.txt"
+        qssh-import "${CONFIG_FILE}"
     fi
+
+    # Load the configuration of the config file into a dict
+    
+    # Config file structure (it's a CSV): ~/.config/qssh.csv
+    # NAME,SERVER
+
+    : # Put Code Here
 
     # Connect to qssh host
     function qssh-connect() {
         :
     }
 
-    # Add or modify a qssh host
-    function qssh-add-host() {
-        :
-    }
+    alias qsc='qssh-connect'
 
-    # Add or modify a qssh filepath
-    function qssh-add-path() {
-        :
-    }
-    
-    # Add or modify an ssh key
-    function qssh-add-key() {
+    # Add or modify a qssh host
+    function qssh-add() {
+        # 1. Generate new SSH key
+        # 2. Copy ID (User Input Required)
+        # 3. Add name to config
         :
     }
 
     # Remove a key, host, or filepath
     function qssh-remove() {
+        # 1. Remove SSH key
+        # 2. Remove name from config
         :
     }
 
     # Purge the qssh config file
     function qssh-purge() {
-        :     
+        > "${CONFIG_FILE}"
     }
 
     # Secure copy a file to or from a qssh host
@@ -61,8 +60,13 @@ function qssh() {
     }
 
     # Copy an ssh key to clipboard
-    function qssh-copy-key() {
+    function qssh-get-key() {
         :
+    }
+
+    # List available host/path names
+    function qssh-list() {
+        column -s ',' -t < "${CONFIG_FILE}"
     }
 
     if [[ ! -f "${HOME}/.ssh/${QSSH_DEFAULT_KEY_NAME}" || ! -f "${HOME}/.ssh/${QSSH_DEFAULT_KEY_NAME}.pub" ]]; then
@@ -76,61 +80,46 @@ function qssh() {
         echo "Connect to a predefined ssh server."
         echo "=================================="
         echo "Usage:"
-        echo "qssh connect [(-n|--name) <host_name> | (-h|--home) <host_address>] [(-p|--password) <password>]"
-        echo "             [(-d|--dir) <cd_path> | (-l|--loc|--location) <cd_name>]"
+        echo "qsc <host_name>:[<path>|<path_name>]"
         echo " "
-        echo "qssh add-host (-n|--name) <host_name> [(-h|--home) <host_address>] [(-o|--force|--overwrite)]"
-        echo "              [(-k|--key) <key_name>]"
+        echo "qssh connect <host_name>:[<path>|<path_name>]"
         echo " "
-        echo "qssh add-path (-d|--dir) <cd_path> (-l|--loc|--location) <cd_name>"
-        echo "              [(-n|--name) <host_name> | (-h|--home) <host_address>] [(-o|--force|--overwrite)]"
+        echo "qssh add (<host_name> <host_address> | <path_name> <host_name>:<path>)"
         echo " "
-        echo "qssh add-key (-k|--key) <key_name> [(-o|--force|--overwrite)] [(-p|--password)]"
+        echo "qssh scp (<local_path> | <host_name>:[<path>|<path_name>])"
+        echo "         (<local_path> | <host_name>:[<path>|<path_name>])"
+        echo "         [-- <scp_args>]"
         echo " "
-        echo "qssh switch (-k|--key) <key_name>"
+        echo "qssh remove <host_or_path_name>"
         echo " "
-        echo "qssh remove ((-n|--name) <host_name> | (-l|--loc|--location) <cd_name> | (-k|--key) <key_name>)"
+        echo "qssh import <config_file>"
+        echo " "
+        echo "qssh get-key <host_name>[:<path_name>]"
+        echo " "
+        echo "qssh list"
         echo " "
         echo "qssh purge"
-        echo " "
-        echo "qssh scp [(-f|--from) [(-n|--name) <host_name> | (-h|--home) <host_address>]"
-        echo "         [(-d|--dir) <cd_path> (-l|--loc|--location) <cd_name>] [(-p|--password) <password>]]"
-        echo "         [(-t|--to) [(-n|--name) <host_name> | (-h|--home) <host_address>]"
-        echo "         [(-d|--dir) <cd_path> (-l|--loc|--location) <cd_name>] [(-p|--password) <password>]]"
-        echo "         [(-a|--args|--scp-args) <scp_args>]"
-        echo " "
-        echo "qssh load-config <config_file>"
-        echo " "
-        echo "qssh copy-key <key_name>"
         echo " "
         echo "=================================="
         echo "Commands:"
         echo "connect                Connect to an SSH host"
-        echo "add-host               Add/Modify an SSH host to the quick-access name list"
-        echo "add-path               Add/Modify a named file path on a given SSH host"
-        echo "add-key                Add/Modify an existing ssh key"
-        echo "switch                 Switch default SSH key"
-        echo "remove                 Remove a named host or file path or ssh key"
-        echo "purge                  Remove ALL named hosts, file paths, and default key options"
+        echo "add                    Add/Modify an SSH host or directory to the quick-access name list"
         echo "scp                    Copy files to and from host"
-        echo "load-config            Load specified qssh configuration file into current environment"
-        echo "copy-key               Copy SSH key"
+        echo "remove                 Remove a named host or file path or ssh key"
+        echo "import                 Import a pre-existing configuration file and create relevant keys"
+        echo "get-key                Copy host/path SSH key to clipboard (requires xclip)"
+        echo "list                   List existing saved hosts and paths"
+        echo "purge                  Remove ALL named hosts, file paths, and default key options"
         echo "help                   Access the help menu"
         echo "=================================="
         echo "Options:"
-        echo "-h --host              An SSH server host, localhost or '-n' if none provided"
-        echo "-d --dir               A directory to cd into or copy to/from, CWD or '-l' if none provided"
-        echo "-p --password          The password required to connect to the host"
+        echo "-n --name              Generic alphanumeric name field"
         echo "-t --to                File destination, local CWD if none provided"
         echo "-f --from              File origin, local CWD if none provided"
-        echo "-n --name              The name of a saved server or to save a server as"
-        echo "-k --key               The name of a saved key in HOME/.ssh directory"
-        echo "-l --loc --location    The name of a saved path location or to save a path as"
         echo "-o --force --overwrite Overwite any existing name setting"
-        echo "-a --args --scp-args   Any arguments to include in the scp command. Must occur at end of command"
         echo "=================================="
         echo "Notes:"
-        echo "Hyphenating the first argument instead of using space (e.g. qssh-test instead of qssh test)"
+        echo "Hyphenating the first argument instead of using space (e.g. qssh-help instead of qssh help)"
         echo "will also call the desired function."
         echo "=================================="
     }

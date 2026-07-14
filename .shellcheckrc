@@ -1,0 +1,11 @@
+# Project-level ShellCheck config for sourced Bash modules.
+# Keep this file in sync with CI and VS Code shellcheck.customArgs.
+#
+# SC1091 (not following sourced files) is suppressed via --exclude on the
+# command line because the snap shellcheck ignores 'disable=' in rc files.
+# All modules and profiles are sourced dynamically at runtime, so static
+# source following is intentionally not supported.
+
+source-path=SCRIPTDIR
+source-path=.
+severity=info

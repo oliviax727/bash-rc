@@ -10,6 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - name: Install ShellCheck
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y shellcheck
+    - name: Lint shell scripts with ShellCheck
+      run: |
+        shellcheck --norc --rcfile=.shellcheckrc --exclude=SC1091 -S info -f gcc $(git ls-files '*.sh' '*.bash' '*.bashrc' '*.bash_aliases' '*.bash_profile' 'bash_unit')
     - name: Unit testing with bash_unit
       run: |
         curl -s https://raw.githubusercontent.com/bash-unit/bash_unit/master/install.sh | bash

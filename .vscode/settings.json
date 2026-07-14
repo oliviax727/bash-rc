@@ -1,0 +1,9 @@
+{
+  "shellcheck.customArgs": [
+    "--norc",
+    "--rcfile=/home/ohrf/Desktop/Fun/bash-rc/.shellcheckrc",
+    "--exclude=SC1091",
+    "-S",
+    "info"
+  ]
+}

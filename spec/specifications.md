@@ -147,8 +147,33 @@
 
 ## Custom Profiles
 
+| Function | Description |
+| --- | --- |
+| `test_profiles_none_sources_and_runs_without_output` | Confirms `profiles/none.bash_profile` sources and its hooks run without error or user-visible output under standard harness settings. |
+| `test_profiles_delll_sources_and_runs_without_output` | Confirms `profiles/delll.bash_profile` sources and its hooks run without error or user-visible output. |
+| `test_profiles_sirius_sources_and_runs_without_output` | Confirms `profiles/Sirius.bash_profile` sources and its hooks run without error or user-visible output. |
+| `test_profiles_setonix_sources_and_runs_without_output` | Confirms `profiles/setonix.bash_profile` sources and its hooks run without error or user-visible output. |
+| `test_profiles_nid_sources_and_runs_without_output` | Confirms `profiles/nid.bash_profile` sources and its hooks run without error or user-visible output. |
+| `test_profiles_macbook_sources_and_runs_without_output` | Confirms `profiles/MacBook.bash_profile` sources and its hooks run without error or user-visible output. |
+| `test_profiles_test_sources_and_runs_without_output` | Confirms `profiles/test.bash_profile` sources and its hooks run without error or user-visible output. |
+
 
 ## Unpublished Tests
+
+| Function | Description |
+| --- | --- |
+| `test_unpublished_test_enter_sources_without_error_or_output` | Confirms `test/test_enter.bash` sources without error or user-visible output. |
+| `test_unpublished_test_alias_sources_without_error_or_output` | Confirms `test/test_alias.bash_aliases` sources without error or user-visible output. |
+| `test_unpublished_test_rc_sources_without_error_or_output` | Confirms `test/test_rc.bashrc` sources without error or user-visible output. |
+| `test_unpublished_test_exit_sources_without_error_or_output` | Confirms `test/test_exit.bash` sources without error or user-visible output. |
+| `test_unpublished_test_profile_sources_and_runs_without_error_or_output` | Confirms `test/test_profile.bash_profile` and its hooks execute without error or user-visible output. |
+
+## Setup Scripts
+
+| Function | Description |
+| --- | --- |
+| `test_setup_sh_runs_without_error_or_output` | Confirms `setup.sh` runs non-interactively (`-n`) without error or unintended output in a sandboxed environment. |
+| `test_setup_root_sh_invokes_setup_sh_without_error_or_output` | Confirms `setup_root.sh` invokes `setup.sh` through `su` without error or unintended output. |
 
 
 # Untestable Cases

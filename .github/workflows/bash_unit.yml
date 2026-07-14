@@ -13,4 +13,18 @@ jobs:
     - name: Unit testing with bash_unit
       run: |
         curl -s https://raw.githubusercontent.com/bash-unit/bash_unit/master/install.sh | bash
-        FORCE_COLOR=true ./bash_unit spec/test-*
+        shopt -s nullglob
+        for spec_file in spec/test-*; do
+          FORCE_COLOR=true timeout 15 ./bash_unit "$spec_file"
+          status=$?
+
+          if [ $status -eq 124 ]; then
+            echo "::error::Timeout failure: $spec_file exceeded 15 seconds"
+            exit 124
+          fi
+
+          if [ $status -ne 0 ]; then
+            echo "::error::Test failure: $spec_file exited with status $status"
+            exit $status
+          fi
+        done

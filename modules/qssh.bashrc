@@ -1,37 +1,42 @@
 # ===== CUSTOM COMMANDS - QUICK SSH===== #
 
+declare -gA QSSH_HOSTS=()
+
 function sshcd () { ssh -t $1 "source ~/.bashrc; cd $2; \$SHELL --login"; }
 
 function qssh() {
     
-    local CONFIG_FILE="${HOME}/.config/qssh/qssh.csv"
-    local CONFIG_DIR="${HOME}/.config/qssh"
-    
+    QSSH_CONFIG_FILE="${HOME}/.config/qssh/qssh.csv"
+    QSSH_CONFIG_DIR="${HOME}/.config/qssh"
+
     # Load a specific configuration file from the environment
     function qssh-import() {
         if [[ "$1" == "-o" ]] || [[ "$1" == "--force" ]] || [[ "$1" == "-overwrite" ]]; then
             shift
-            cp -f $1 "${CONFIG_FILE}"
+            cp -f $1 "${QSSH_CONFIG_FILE}"
         fi
+
+        # Rebuild map from file to avoid stale entries after add/remove/import.
+        QSSH_HOSTS=()
 
         while IFS=, read -r name addr
         do
-            echo "$name and $addr"
+            QSSH_HOSTS["$name"]="$addr"
         done < $1
     }
     
-    if [[ ! -f "${CONFIG_FILE}" ]]; then
+    if [[ ! -f "${QSSH_CONFIG_FILE}" ]]; then
         echo -e "${INFORMATION_TEXT}: No pre-existing configuration file was found. This means qssh will"
-        echo -e "assume an empty configuration. Creating a new empty config file: ${CONFIG_FILE}."
+        echo -e "assume an empty configuration. Creating a new empty config file: ${QSSH_CONFIG_FILE}."
         
-        touch "${CONFIG_FILE}"
+        touch "${QSSH_CONFIG_FILE}"
     fi
 
-    if [[ ! -d "${CONFIG_DIR}" ]]; then
+    if [[ ! -d "${QSSH_CONFIG_DIR}" ]]; then
         echo -e "${INFORMATION_TEXT}: No pre-existing configuration directory was found. This means qssh will"
-        echo -e "assume an no ssh keys exist. Creating a new empty config directory: ${CONFIG_DIR}."
+        echo -e "assume an no ssh keys exist. Creating a new empty config directory: ${QSSH_CONFIG_DIR}."
         
-        mkdir -p "${CONFIG_DIR}"
+        mkdir -p "${QSSH_CONFIG_DIR}"
     fi
     
     # Load the configuration of the config file into a dict
@@ -40,8 +45,7 @@ function qssh() {
     # <config_file>={NAME,SERVER\n}
     #                            ^ Important to have newline after every entry and before EOF
 
-    declare -A QSSH_HOSTS
-    qssh-import "${CONFIG_FILE}"
+    qssh-import "${QSSH_CONFIG_FILE}"
 
     # Split qssh name/addres
     function qssh-split-by-colon() {
@@ -53,15 +57,17 @@ function qssh() {
     # Connect to qssh host
     function qssh-connect() {
         if [[ "$1" =~ ':' ]]; then
-            local remote_arr="$(qssh-split-by-colon "$1")"
-            sshcd "${remote_arr[@]}"
+            local -a remote_arr
+            IFS=' ' read -r -a remote_arr <<< "$(qssh-split-by-colon "$1")"
+            local host_name="${remote_arr[0]}"
+            local host_path="${remote_arr[1]}"
+            ssh -i "${QSSH_CONFIG_DIR}/${host_name}" -t "${QSSH_HOSTS["${host_name}"]}" "source ~/.bashrc; cd ${host_path}; \$SHELL --login"
         else
-            ssh "${QSSH_HOSTS["$1"]}"
+            ssh -i "${QSSH_CONFIG_DIR}/$1" "${QSSH_HOSTS["$1"]}"
         fi
     }
     
-    alias qsc='qssh-connect'
-    export QSSH_HOSTS
+    alias qsc='qssh connect'
     
     # Add or modify a qssh host
     function qssh-add() {
@@ -70,8 +76,11 @@ function qssh() {
         # 3. Add name to config
         
         # Check override
-        [[ "$1" == "-o" ]] || [[ "$1" == "--force" ]] || [[ "$1" == "-overwrite" ]]
-        local overwrite_flag="$?"
+        local overwrite_flag="0"
+
+        if [[ "$1" == "-o" ]] || [[ "$1" == "--force" ]] || [[ "$1" == "--overwrite" ]]; then
+            overwrite_flag="1"
+        fi
 
         [[ "$overwrite_flag" == "1" ]] && shift
 
@@ -79,31 +88,36 @@ function qssh() {
         local addr="$2"
 
         # Check path
-        [[ ! "$2" =~ ":" ]]
-        local path_flag="$?"
+        local path_flag="0"
+        if [[ "$2" =~ ":" ]]; then
+            path_flag="1"
+        fi
 
         # Only create a key if the path flag is false
         if [[ "${path_flag}" == "0" ]]; then
 
             # Generate SSH key, run ssh-copy-id, and add to config file
-            if [[ ! -f "${HOME}/.ssh/${name}.pub" ]]; then
-                echo -e "${WARNING_TEXT}: The SSH key already exists in the configuration directory!"
-                echo -e "Skipping creation of SSH key and addition to remote host."
-            elif [[ ! -z "${QSSH_HOSTS[${name}]}" ]]; then
+            if [[ ! -z "${QSSH_HOSTS[${name}]}" ]] && [[ "${overwrite_flag}" == "0" ]]; then
                 echo -e "${WARNING_TEXT}: The host name already exists in the configuration file!"
                 echo -e "Skipping creation of SSH key and addition to remote host."
             else
-                ssh-keygen -t ed25519 <<< "${CONFIG_DIR}/${name}\n\n\n" && \
-                    ssh-copy-id -f -i "${CONFIG_DIR}/${name}" "${addr}" && \
-                    echo "${name},${addr}" >> "${CONFIG_FILE}"
-                
-                # Delete key if the op failed
-                [[ "$?" == "1" ]] && rm -rf "${CONFIG_DIR}/${name}" "${CONFIG_DIR}/${name}.pub"
+                if [[ ! -f "${QSSH_CONFIG_DIR}/${name}.pub" ]]; then
+                    ssh-keygen -t ed25519 -f "${QSSH_CONFIG_DIR}/${name}" -N "" || return 1
+                fi
+
+                ssh-copy-id -f -i "${QSSH_CONFIG_DIR}/${name}.pub" "${addr}" || return 1
+
+                if [[ "${overwrite_flag}" == "1" ]]; then
+                    sed -i "/^${name},/d" "${QSSH_CONFIG_FILE}"
+                fi
+
+                [[ -z "${QSSH_HOSTS[${name}]}" ]] && echo "${name},${addr}" >> "${QSSH_CONFIG_FILE}"
             fi
 
         else
 
-            local remote_arr="$(qssh-split-by-colon "$1")"
+            local -a remote_arr
+            IFS=' ' read -r -a remote_arr <<< "$(qssh-split-by-colon "$1")"
             local host_name="${remote_arr[0]}"
             local host_path="${remote_arr[1]}"
 
@@ -117,7 +131,7 @@ function qssh() {
                 echo -e "${ERROR_TEXT}: Remote directory doesn't exist on host!"
                 echo -e "Skipping addition of path to configuration file."
             else
-                echo "${host_name}:${name},${addr}" >> "${CONFIG_FILE}"
+                echo "${host_name}:${name},${addr}" >> "${QSSH_CONFIG_FILE}"
             fi
 
         fi
@@ -129,17 +143,17 @@ function qssh() {
         # 2. Remove name from config
 
         if [[ ! "$1" =~ ":" ]]; then
-            rm -rf "${CONFIG_DIR}/$1" "${CONFIG_DIR}/$1.pub"
-            sed -i "/^$1/d" "${CONFIG_FILE}"
+            rm -rf "${QSSH_CONFIG_DIR}/$1" "${QSSH_CONFIG_DIR}/$1.pub"
+            sed -i "/^$1/d" "${QSSH_CONFIG_FILE}"
         else
-            sed -i "/^$1/d" "${CONFIG_FILE}"
+            sed -i "/^$1/d" "${QSSH_CONFIG_FILE}"
         fi
     }
     
     # Purge the qssh config file
     function qssh-purge() {
-        rm -rf "${CONFIG_DIR}/*"
-        touch "${CONFIG_FILE}"
+        rm -rf "${QSSH_CONFIG_DIR}/*"
+        touch "${QSSH_CONFIG_FILE}"
     }
 
     # Evaluate and return a valid qssh scp path
@@ -186,14 +200,14 @@ function qssh() {
     
     # Copy an ssh key to clipboard
     function qssh-get-key() {
-        local pub_key="$(cat "${CONFIG_DIR}/$1.pub")"
+        local pub_key="$(cat "${QSSH_CONFIG_DIR}/$1.pub")"
         echo "${pub_key}" | xclip -selection clipboard
-        echo "${INFORMATION_TEXT}: Contents of ${CONFIG_DIR}/$1.pub copied to clipboard."
+        echo "${INFORMATION_TEXT}: Contents of ${QSSH_CONFIG_DIR}/$1.pub copied to clipboard."
     }
     
     # List available host/path names
     function qssh-list() {
-        column -s ',' -t < "${CONFIG_FILE}"
+        column -s ',' -t < "${QSSH_CONFIG_FILE}"
     }
     
     # Help
@@ -258,4 +272,8 @@ function qssh() {
         echo -e "$error_text"
         return 1
     fi
+
+    qssh-import "${QSSH_CONFIG_FILE}"
 }
+
+qssh help 2>&1 > /dev/null

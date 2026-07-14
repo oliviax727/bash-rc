@@ -9,6 +9,18 @@ function qssh() {
     QSSH_CONFIG_FILE="${HOME}/.config/qssh/qssh.csv"
     QSSH_CONFIG_DIR="${HOME}/.config/qssh"
 
+    # Cross-platform in-place sed edit: GNU sed supports -i, BSD sed requires -i ''.
+    function qssh-sed-inplace() {
+        local expr="$1"
+        local file="$2"
+
+        if sed --version >/dev/null 2>&1; then
+            sed -i -e "$expr" "$file"
+        else
+            sed -i '' -e "$expr" "$file"
+        fi
+    }
+
     # Load a specific configuration file from the environment
     function qssh-import() {
         if [[ "$1" == "-o" ]] || [[ "$1" == "--force" ]] || [[ "$1" == "-overwrite" ]]; then
@@ -108,7 +120,7 @@ function qssh() {
                 ssh-copy-id -f -i "${QSSH_CONFIG_DIR}/${name}.pub" "${addr}" || return 1
 
                 if [[ "${overwrite_flag}" == "1" ]]; then
-                    sed -i "/^${name},/d" "${QSSH_CONFIG_FILE}"
+                    qssh-sed-inplace "/^${name},/d" "${QSSH_CONFIG_FILE}"
                 fi
 
                 [[ -z "${QSSH_HOSTS[${name}]}" ]] && echo "${name},${addr}" >> "${QSSH_CONFIG_FILE}"
@@ -144,9 +156,9 @@ function qssh() {
 
         if [[ ! "$1" =~ ":" ]]; then
             rm -rf "${QSSH_CONFIG_DIR}/$1" "${QSSH_CONFIG_DIR}/$1.pub"
-            sed -i "/^$1/d" "${QSSH_CONFIG_FILE}"
+            qssh-sed-inplace "/^$1/d" "${QSSH_CONFIG_FILE}"
         else
-            sed -i "/^$1/d" "${QSSH_CONFIG_FILE}"
+            qssh-sed-inplace "/^$1/d" "${QSSH_CONFIG_FILE}"
         fi
     }
     

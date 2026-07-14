@@ -2,6 +2,18 @@
 
 function bash-rc() {
 
+    # Cross-platform in-place sed edit: GNU sed supports -i, BSD sed requires -i ''.
+    function bash-rc-sed-inplace() {
+        local expr="$1"
+        local file="$2"
+
+        if sed --version >/dev/null 2>&1; then
+            sed -i -e "$expr" "$file"
+        else
+            sed -i '' -e "$expr" "$file"
+        fi
+    }
+
     function bash-rc-check-path() {
 
         local check_null=0
@@ -55,7 +67,7 @@ function bash-rc() {
         check_string='export BASHRC_PATH='
         replace_string=$(echo "export BASHRC_PATH=\"$1\"" | sed 's/\//\\\//g')
 
-        sed -i '' -e "s/^${check_string}.*/${replace_string}/g" "$2"
+        bash-rc-sed-inplace "s/^${check_string}.*/${replace_string}/g" "$2"
     }
 
     # Load repository from upstream

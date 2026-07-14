@@ -389,7 +389,7 @@ function admiral() {
     # Help
     function admiral-help() {
         echo "=================================="
-        echo "Connect to a predefined ssh server."
+        echo "Connect to a mountable operating system located on a connected disk."
         echo "=================================="
         echo "Usage:"
         echo "admiral boot (-r|--root) sdXn [(-e|--efi) sdXm]"

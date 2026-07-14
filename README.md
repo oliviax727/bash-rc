@@ -75,6 +75,7 @@ All project documentation is in `documents/`:
 - [Bash alias modules](documents/bash-aliases-modules.md)
 - [Bash-rc modules](documents/bashrc-modules.md)
 - [Bash-rc core module](documents/bash-rc-core-module.md)
+- [Customisation guide](documents/customisation-guide.md)
 - [Miscellaneous notes](documents/miscellaneous-notes.md)
 - [Test specifications](documents/specifications.md)
 

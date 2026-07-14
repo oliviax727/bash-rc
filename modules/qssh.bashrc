@@ -161,10 +161,12 @@ function qssh() {
         local full_name
         local host_name
         local path_name
+        local target
 
         if [[ "$1" =~ ":" ]]; then
             full_name="$1"
-            remote_arr="$(qssh-split-by-colon "${full_name}")"
+            local -a remote_arr
+            IFS=' ' read -r -a remote_arr <<< "$(qssh-split-by-colon "${full_name}")"
             host_name="${remote_arr[0]}"
             path_name="${remote_arr[1]}"
         else
@@ -175,11 +177,12 @@ function qssh() {
 
         if [[ ! -z "${QSSH_HOSTS["${full_name}"]}" ]]; then
             # Host AND directory are valid names
-            echo "${QSSH_HOSTS["${full_name}"]}"
+            target="${QSSH_HOSTS["${full_name}"]}"
+            [[ "$target" =~ ":" ]] && echo "$target" || echo "${target}:"
         elif [[ ! -z "${QSSH_HOSTS["${host_name}"]}" ]]; then
             # Host is a valid name AND path is an actual path
             echo "${QSSH_HOSTS["${host_name}"]}:${path_name}"
-        elif [[ -d "$(evalpath "${full_name}")" ]]; then
+        elif [[ -e "$(evalpath "${full_name}")" ]]; then
             # Parameter is a valid local path
             echo "$(evalpath "${full_name}")"
         else
@@ -187,13 +190,14 @@ function qssh() {
             return 1
         fi
     }
-    
+
     # Secure copy a file to or from a qssh host
     function qssh-scp() {
-        local from_file="$(qssh-eval-scp-path "$1")"
-        local to_file="$(qssh-eval-scp-path "$2")"
+        local from_file="$(qssh-eval-scp-path "$1")" || return 1
+        local to_file="$(qssh-eval-scp-path "$2")" || return 1
 
-        shift; shift; shift;
+        shift 2
+        [[ "$1" == "--" ]] && shift
 
         scp "$@" "${from_file}" "${to_file}"
     }

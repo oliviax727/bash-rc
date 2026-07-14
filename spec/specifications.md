@@ -65,6 +65,20 @@
 | `test_paths_prepends_expected_go_binary_path` | Verifies `PATH` begins with `/usr/local/go/bin` after sourcing. |
 | `test_paths_defines_clipboard_alias` | Confirms `cc` clipboard alias is defined. |
 
+## Path Manager
+
+| Function | Description |
+| --- | --- |
+| `test_test_cmd_returns_success_for_true_expression` | Verifies `test-cmd` returns success for true shell expressions. |
+| `test_test_cmd_returns_failure_for_false_expression` | Verifies `test-cmd` returns failure for false shell expressions. |
+| `test_evalpath_expands_home_tilde` | Checks `evalpath` expands `~` to `HOME` under `realpath -m` behavior. |
+| `test_evalpath_handles_paths_with_spaces` | Confirms `evalpath` can resolve paths containing spaces safely. |
+| `test_set_cwd_uses_home_shortening_when_twd_disabled` | Verifies `set_CWD` shortens paths under `HOME` to `~` when compression mode is disabled. |
+| `test_set_cwd_compresses_prefix_using_quick_jump_vars` | Verifies `set_CWD` compresses path prefixes using `QUICK_JUMP_VARS` (e.g. `$WORKROOT/...`). |
+| `test_terminal_colour_help_runs_without_error` | Confirms `terminal_colour --help` runs without error. |
+| `test_term_col_alias_is_defined` | Confirms `term_col` alias is defined. |
+| `test_cleanpath_removes_duplicates_and_invalid_entries` | Verifies `cleanpath` removes blank/invalid entries and duplicates while preserving valid order. |
+
 
 # Additional Unit Test Specifications
 

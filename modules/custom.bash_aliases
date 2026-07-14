@@ -48,12 +48,12 @@ function cd-run() {
 # Filename format friendly time
 alias filename-date="date '+%F-%H%M-%Z'"
 
-#Removes old revisions of snaps
-#CLOSE ALL SNAPS BEFORE RUNNING THIS
+# Removes old revisions of snaps
 function clean-snaps() {
     set -eu
-    LANG=en_US.UTF-8 snap list --all | awk '/disabled/{print $1, $3}' |
-        while read snapname revision; do
-            snap remove "$snapname" --revision="$revision"
-        done
+    while read -r snapname revision; do
+        snap remove "$snapname" --revision="$revision"
+    done < <(
+        LANG=en_US.UTF-8 snap list --all | awk 'NR > 1 && $6 == "disabled" {print $1, $3}'
+    )
 }

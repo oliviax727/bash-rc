@@ -1,0 +1,16 @@
+name: bash_unit tests
+on:
+  push:
+    branches: [ '**' ]
+  pull_request:
+    branches: [ '**' ]
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Unit testing with bash_unit
+      run: |
+        curl -s https://raw.githubusercontent.com/bash-unit/bash_unit/master/install.sh | bash
+        FORCE_COLOR=true ./bash_unit spec/test-*

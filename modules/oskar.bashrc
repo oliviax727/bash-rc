@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # ===== CUSTOM COMMANDS - OSKAR ===== #
 
 # OSKAR Generic command
@@ -74,11 +76,11 @@ function oskar-bash() {
     
     # Check if files exist
     if [[ $bflag -eq 1 && $gflag -eq 1 ]] && ! type "$prog" > /dev/null; then
-        printf "${ERROR_TEXT}: A CLI OSKAR applet/command on this system does not exist.\n"
+        printf '%s\n' "${ERROR_TEXT:-ERROR}: A CLI OSKAR applet/command on this system does not exist."
     elif [[ $bflag -eq 1 && $gflag -eq 0 ]] && ! type "$exes/$prog" > /dev/null; then
-        printf "${ERROR_TEXT}: There is no $prog executable file in $exes or the directory does not exist.\n"
+        printf '%s\n' "${ERROR_TEXT:-ERROR}: There is no $prog executable file in $exes or the directory does not exist."
     elif [[ $bflag -eq 0 && ! -f $exes ]]; then
-        printf "${ERROR_TEXT}: There does not appear to be any OSKAR SIF files in the given directory.\n"
+        printf '%s\n' "${ERROR_TEXT:-ERROR}: There does not appear to be any OSKAR SIF files in the given directory."
     fi
 
     # Execute commands
@@ -87,11 +89,19 @@ function oskar-bash() {
     fi
 
     if [[ $bflag -eq 1 && $gflag -eq 1 ]]; then
-        $prog $ofile
+        if [[ -n "$ofile" ]]; then
+            "$prog" "$ofile"
+        else
+            "$prog"
+        fi
     elif [[ $bflag -eq 1 && $gflag -eq 0 ]]; then
-        "$exes/$prog" $ofile
+        if [[ -n "$ofile" ]]; then
+            "$exes/$prog" "$ofile"
+        else
+            "$exes/$prog"
+        fi
     else
-        singularity exec --nv --bind $PWD --cleanenv --home $PWD $sfile $prog $ofile
+        singularity exec --nv --bind "$PWD" --cleanenv --home "$PWD" "$exes" "$prog" "$ofile"
     fi
 
 }

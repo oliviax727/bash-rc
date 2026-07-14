@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # ===== CUSTOM COMMANDS - GIT HELPER COMMANDS AND AUTOMATION ===== #
 
 # Propagate a single commit throughout all of the branches
@@ -5,18 +7,21 @@ function git-propagate() {
 
     git stash
 
-    local branches=($(git branch -r | cut -c 10- | grep -v HEAD))
-    local commit=$(git rev-parse HEAD)
-    local current=$(git rev-parse --abbrev-ref HEAD)
+    local -a branches
+    mapfile -t branches < <(git branch -r | cut -c 10- | grep -v HEAD)
+    local commit
+    commit=$(git rev-parse HEAD)
+    local current
+    current=$(git rev-parse --abbrev-ref HEAD)
 
-    for branch in "${branches[@]}}"; do
+    for branch in "${branches[@]}"; do
         if [ ! "$branch" == "$current" ]; then
-            git checkout $branch
-            git cherry-pick $commit
+            git checkout "$branch"
+            git cherry-pick "$commit"
             git push
         fi
     done
 
-    git checkout $current
+    git checkout "$current"
     git stash apply
 }

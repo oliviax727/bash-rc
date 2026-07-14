@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # ===== BASIC ALIAS COMMANDS ===== #
 
 # Jupyter Notebook
@@ -18,6 +20,7 @@ alias tomcat_restart='sudo systemctl restart tomcat'
 alias open_tcp='sudo ufw allow 8080/tcp'
 
 # Breakpoint code
+# shellcheck disable=SC2154
 alias breakpoint='
     echo "Entering debugging (Ctrl-d to exit):"
     while read -p"Debugging> " debugging_line
@@ -29,7 +32,7 @@ alias breakpoint='
 # One-Way Diff
 function diff-diode() {
 
-    diff $1 $2 | grep '^<' | cut -c 3-
+    diff "$1" "$2" | grep '^<' | cut -c 3-
 
 }
 
@@ -40,7 +43,7 @@ function cd-run() {
 
     cd "$1"
 
-    eval $2
+    eval "$2"
 
     cd "$pwd_save"
 }

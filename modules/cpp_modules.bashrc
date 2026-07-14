@@ -1,10 +1,12 @@
+# shellcheck shell=bash
+
 # ===== CUSTOM COMMANDS - GCC COMPILER ===== #
 
 # colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # Run C++ file with g++
-export CPPSTARTSTRING='#include <iostream>\n\nint main()\n{\n\tstd::cout << "Hello World" << std::endl;\n\treturn 0;\n}\n'
+export CPPSTARTSTRING=$'#include <iostream>\n\nint main()\n{\n\tstd::cout << "Hello World" << std::endl;\n\treturn 0;\n}\n'
 
 # Initialise C++ file
 function init-cpp() {
@@ -16,7 +18,7 @@ function init-cpp() {
 
     if [[ ! -f "$FNAME.cpp" ]]; then
         touch "$FNAME.cpp"
-        echo -e $CPPSTARTSTRING >> "$FNAME.cpp"
+        printf '%s' "$CPPSTARTSTRING" > "$FNAME.cpp"
         g++ -o "$FNAME.out" "$FNAME.cpp"
         g++ -o "$FNAME.gdb.out" -g "$FNAME.cpp"
     else

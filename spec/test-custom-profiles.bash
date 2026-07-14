@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC2329
+
 teardown() {
     rm -f ./profile-out.*
 }
@@ -19,6 +21,7 @@ run_profile_file() {
     local output_file
     output_file=$(mktemp "./profile-out.XXXXXX")
 
+    # shellcheck disable=SC1090
     source "$profile_file" > "$output_file" 2>&1
     local rc=$?
 

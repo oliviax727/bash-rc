@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC2329
+
 teardown() {
     rm -rf ./bash-rc-test.*
 }

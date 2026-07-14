@@ -1,3 +1,5 @@
+# shellcheck shell=bash disable=SC2015,SC1090,SC1091,SC2154,SC2089,SC2090,SC2086,SC2016,SC2320
+
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples

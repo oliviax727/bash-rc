@@ -1,3 +1,6 @@
+# shellcheck shell=bash
+# shellcheck disable=SC2154
+
 # ===== CUSTOM COMMANDS - Evalpath ===== #
 
 # Test command output
@@ -18,8 +21,10 @@ function evalpath() {
             local arg_replaced_path="$arg"
 
             if [[ "$arg" =~ "=" ]]; then
-                local latter_path="$(echo "$arg" | awk -F= '{print $2}')"
-                local eval_latter_path="$(evalpath -m "${latter_path}")"
+                local latter_path
+                local eval_latter_path
+                latter_path="$(echo "$arg" | awk -F= '{print $2}')"
+                eval_latter_path="$(evalpath -m "${latter_path}")"
                 arg_replaced_path="${arg/"$latter_path"/"$eval_latter_path"}"
             fi
 
@@ -38,12 +43,13 @@ function evalpath() {
         fi
     done
 
+    # shellcheck disable=SC2034
     IFS=':' read -r -a args_array <<< "$arguments"
 
     eval '"realpath${args_array[@]}"'
 }
 
-if [ "$force_set_TWD" == "yes" ]; then
+if [ "${force_set_TWD:-}" == "yes" ]; then
 	set_TWD=yes
 else
 	set_TWD=
@@ -61,10 +67,13 @@ function set_CWD(){
         # Always order QUICK_JUMP_VARS in order of precedence
         for VAR in "${QJ_VARS[@]}"; do
 
-            export TWD="$(eval "echo \$${VAR}")"
-            local relpath="$(evalpath -sm --relative-to="$TWD" "$PWD")"
+            local relpath
+            local twd_value
+            twd_value="$(eval "echo \$${VAR}")"
+            export TWD="$twd_value"
+            relpath="$(evalpath -sm --relative-to="$TWD" "$PWD")"
 
-            if [[ "$relpath" =~ '..' ]]; then
+            if [[ "$relpath" =~ \.\. ]]; then
                 export CWD="${PWD/${HOME}/\~}"
             elif [[ "$relpath" == '.' ]]; then
                 export CWD="\$$VAR"
@@ -81,6 +90,7 @@ PROMPT_COMMAND="${PROMPT_COMMAND}; set_CWD"
 
 # Change preset terminal colour
 function terminal_colour(){
+    # shellcheck disable=SC2154
 
     set_CWD
 

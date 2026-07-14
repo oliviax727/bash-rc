@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 profile_enter() {
     # Quick-Jump/CD
     export software="/software/projects/mwaeor/ohrw"

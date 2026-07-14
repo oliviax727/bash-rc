@@ -1,7 +1,9 @@
+# shellcheck shell=bash
+
 profile_enter() {
 
-    if [ $BASH_PROFILE == "none" ]; then
-        printf "${INFORMATION_TEXT}: No .bashrc profile recognised!\n"
+    if [ "$BASH_PROFILE" == "none" ]; then
+        printf '%s\n' "${INFORMATION_TEXT:-INFO}: No .bashrc profile recognised!"
     fi
 
 }

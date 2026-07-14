@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC2329
+
 teardown() {
     rm -rf ./qssh-home.* ./qssh-bin.*
     rm -f ./qssh-ssh-log.* ./qssh-scp-log.* ./qssh-local.* ./qssh-clip-log.*
 }
 
 test_qssh_help_runs_without_error() {
-    local original_home
     local test_home
-    original_home="$HOME"
     test_home=$(mktemp -d "./qssh-home.XXXXXX")
     test_home=$(realpath -m "$test_home")
 
@@ -22,9 +22,7 @@ test_qssh_help_runs_without_error() {
 }
 
 test_qssh_unknown_command_fails() {
-    local original_home
     local test_home
-    original_home="$HOME"
     test_home=$(mktemp -d "./qssh-home.XXXXXX")
     test_home=$(realpath -m "$test_home")
 
@@ -38,9 +36,7 @@ test_qssh_unknown_command_fails() {
 }
 
 test_qssh_add_creates_entry_with_stubbed_key_setup() {
-    local original_home
     local test_home
-    original_home="$HOME"
     test_home=$(mktemp -d "./qssh-home.XXXXXX")
     test_home=$(realpath -m "$test_home")
 
@@ -74,10 +70,8 @@ test_qssh_add_creates_entry_with_stubbed_key_setup() {
 }
 
 test_qssh_connect_uses_saved_host() {
-    local original_home
     local test_home
     local ssh_log
-    original_home="$HOME"
     test_home=$(mktemp -d "./qssh-home.XXXXXX")
     test_home=$(realpath -m "$test_home")
     ssh_log=$(mktemp "./qssh-ssh-log.XXXXXX")
@@ -102,14 +96,10 @@ test_qssh_connect_uses_saved_host() {
 }
 
 test_qssh_scp_resolves_remote_and_local_paths() {
-    local original_home
-    local original_path
     local test_home
     local scp_log
     local local_file
     local stub_bin
-    original_home="$HOME"
-    original_path="$PATH"
     test_home=$(mktemp -d "./qssh-home.XXXXXX")
     test_home=$(realpath -m "$test_home")
     scp_log=$(mktemp "./qssh-scp-log.XXXXXX")
@@ -143,13 +133,9 @@ EOF
 }
 
 test_qssh_get_key_pipes_pubkey_to_xclip() {
-    local original_home
-    local original_path
     local test_home
     local clip_log
     local stub_bin
-    original_home="$HOME"
-    original_path="$PATH"
     test_home=$(mktemp -d "./qssh-home.XXXXXX")
     test_home=$(realpath -m "$test_home")
     clip_log=$(mktemp "./qssh-clip-log.XXXXXX")

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC1091
+
 test_enter_sources_without_error_or_output() {
     local output
     output="$(source ../enter.bash 2>&1)"

@@ -18,6 +18,7 @@
 
 # shellcheck disable=2317  # Ignore unreachable - most function are not called.
 # shellcheck disable=2155  # Ignore Declare and assign separately
+# shellcheck disable=2329  # Functions are discovered and invoked dynamically.
 
 VERSION=v2.3.3
 

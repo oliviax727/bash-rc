@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC2030,SC2031
+
 teardown() {
   rm -rf ./setup-sandbox.* ./setup-home.* ./setup-bin.*
   rm -f ./setup-su-log.*

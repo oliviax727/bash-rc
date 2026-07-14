@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# shellcheck disable=SC1091
+# shellcheck disable=SC1091,SC2329
 source ../modules/oskar.bashrc
 
 setup_oskar_fake_type() {
@@ -77,10 +77,10 @@ test_oskar_bash_clean_removes_log_files() {
     trap 'rm -rf "$test_root"' RETURN
 
     touch "$test_root/sample.log"
-    pushd "$test_root" >/dev/null
+    pushd "$test_root" >/dev/null || return 1
 
     assert_status_code 0 "oskar-bash -c -i >/dev/null 2>&1"
     assert_status_code 0 "test ! -e sample.log"
 
-    popd >/dev/null
+    popd >/dev/null || return 1
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# shellcheck disable=SC1091
+# shellcheck disable=SC1091,SC2329
 source ../modules/git_helpers.bashrc
 
 test_git_propagate_runs_without_error_with_stubbed_git() {

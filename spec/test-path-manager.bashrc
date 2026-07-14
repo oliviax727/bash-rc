@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC2034
+
 load_path_manager() {
     # shellcheck disable=SC1091
     source ../modules/path_manager.bashrc
@@ -46,11 +48,12 @@ test_set_cwd_uses_home_shortening_when_twd_disabled() {
 
     export HOME="$temp_home"
     mkdir -p "$HOME/base/sub"
-    cd "$HOME/base/sub"
+    cd "$HOME/base/sub" || return 1
 
     set_TWD=
     set_CWD
 
+    # shellcheck disable=SC2088
     assert_equals "~/base/sub" "$CWD"
 }
 
@@ -67,7 +70,7 @@ test_set_cwd_compresses_prefix_using_quick_jump_vars() {
     export WORKROOT="$base_dir/project"
     export QUICK_JUMP_VARS="WORKROOT"
 
-    cd "$base_dir/project/src"
+    cd "$base_dir/project/src" || return 1
 
     set_TWD=yes
     set_CWD

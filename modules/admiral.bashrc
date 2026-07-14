@@ -1,3 +1,5 @@
+# shellcheck shell=bash disable=SC2329
+
 # ===== CUSTOM COMMANDS - BOOT INTO OTHER OS ===== #
 
 function admiral() {
@@ -418,7 +420,7 @@ function admiral() {
     local sel_cmd=$1
     shift
     
-    local error_text="${ERROR_TEXT}: Command doesn't exist. Use \`admiral help\` or \`admiral-help\` to see what commands exist"
+    local error_text="${ERROR_TEXT:-ERROR}: Command doesn't exist. Use \`admiral help\` or \`admiral-help\` to see what commands exist"
     
     if [ "$(type -t "admiral-$sel_cmd")" == "function" ]; then
         eval '"admiral-$sel_cmd" $@'

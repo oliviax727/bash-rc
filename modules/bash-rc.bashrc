@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # ===== BASH-RC PACKAGE MODULES ===== #
 
 function bash-rc() {
@@ -23,12 +25,14 @@ function bash-rc() {
             shift
         fi
 
-        local check_path=$([ -z $1 ] && echo "$BASHRC_PATH" || echo "$(evalpath -sm $1)")
+        local check_path
+        check_path=$([ -z "$1" ] && echo "$BASHRC_PATH" || echo "$(evalpath -sm "$1")")
 
         local repo_name="error"
 
         if [ -d "${check_path}" ] && git -C "${check_path}" -c safe.directory="${check_path}" rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-            local remote_url="$(git -C "${check_path}" -c safe.directory="${check_path}" config --get remote.origin.url 2> /dev/null)"
+            local remote_url
+            remote_url="$(git -C "${check_path}" -c safe.directory="${check_path}" config --get remote.origin.url 2> /dev/null)"
             if [ -n "${remote_url}" ]; then
                 repo_name="$(basename -s ".git" "${remote_url}")"
             fi
@@ -37,13 +41,13 @@ function bash-rc() {
         if [ ! "${repo_name}" == 'bash-rc' ]; then
             [ $check_null -eq 1 ] && return 0
  
-            echo $check_path
+            echo "$check_path"
             bash-rc-check-path -n "${check_path}/bash-rc" || return 0
 
-            echo -e "${ERROR_TEXT}: chosen \$BASHRC_PATH points to a directory (${check_path}) that does not exist"
+            echo -e "${ERROR_TEXT:-ERROR}: chosen \$BASHRC_PATH points to a directory (${check_path}) that does not exist"
             echo "or is not a clone of the bash-rc git repository."
             printf "%s" "Clone bash-rc repository into directory and reset BASHRC_PATH? (y/[n]): " 
-            read confirm
+            read -r confirm
 
             if [ "$confirm" == 'y' ]; then
                 bash-rc-clone "${check_path}"
@@ -53,7 +57,7 @@ function bash-rc() {
                 fi
 
             else
-                echo 'Please make sure to change the BASHRC_PATH to a working git clone using `bash-rc set-path`.'
+                echo "Please make sure to change the BASHRC_PATH to a working git clone using bash-rc set-path."
             fi
 
             return 1
@@ -83,14 +87,17 @@ function bash-rc() {
 
     # Clone repository in chosen directory
     function bash-rc-clone() {
+        # shellcheck disable=SC2016
         local check_string='export BASHRC_PATH='
         local replace_string='export BASHRC_PATH='
 
-        local clone_parent_dir="$([ -z $1 ] && echo '.' || echo "$(evalpath -sm $1)")"
+        local clone_parent_dir
+        clone_parent_dir="$([ -z "$1" ] && echo '.' || echo "$(evalpath -sm "$1")")"
 
         bash-rc-check-path -n "${clone_parent_dir}"
 
         if [ $? -eq 0 ]; then
+            # shellcheck disable=SC2016
             cd-run  "${clone_parent_dir}" '
             (git clone git@github.com:oliviax727/bash-rc.git
             || git clone https://github.com/oliviax727/bash-rc.git)
@@ -119,12 +126,13 @@ function bash-rc() {
     # Publishes a testing module function
     function bash-rc-publish() {
 
-        if [ -z $1 ]; then
+        if [ -z "$1" ]; then
             echo "Please provide an option"
             return 1
         fi
 
-        local file="$(find "${BASHRC_PATH}/test" -type f -name "test_$1.*")"
+        local file
+        file="$(find "${BASHRC_PATH}/test" -type f -name "test_$1.*")"
         filename=$(basename "$file")
         local extension="${filename##*.}"
         
@@ -170,7 +178,7 @@ function bash-rc() {
                 ;;
                 -c)
                     shift
-                    bash-rc-checkout $1
+                    bash-rc-checkout "$1"
                 ;;
                 \?)
                     echo "'$1' is not a valid option. Use \`bash-rc (--help|-h)\` to see what options are available."
@@ -200,8 +208,8 @@ function bash-rc() {
     function bash-rc-purge() {
 
         if [ -d "${BASHRC_PATH}/archive" ]; then
-            if [ "${BASHRC_PATH}/archive" ]; then
-                rm $BASHRC_PATH/archive/*
+            if compgen -G "${BASHRC_PATH}/archive/*" > /dev/null; then
+                rm "${BASHRC_PATH}"/archive/*
             else
                 echo -e "${INFORMATION_TEXT}: Archive directory is empty!"
             fi
@@ -213,7 +221,8 @@ function bash-rc() {
 
     # Set a new BASHRC_PATH variable
     function bash-rc-set-path() {
-        local set_path="$(evalpath -sm $1)"
+        local set_path
+        set_path="$(evalpath -sm "$1")"
 
         if [ -d "${set_path}/bash-rc" ]; then
             echo -e "${INFORMATION_TEXT}: A sub-directory name bash-rc already exists in specified directory. Using sub-directory as the path instead"

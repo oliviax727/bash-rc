@@ -1,8 +1,10 @@
+# shellcheck shell=bash
+
 # ===== CUSTOM COMMANDS - QUICK SSH===== #
 
 declare -gA QSSH_HOSTS=()
 
-function sshcd () { ssh -t $1 "source ~/.bashrc; cd $2; \$SHELL --login"; }
+function sshcd () { ssh -t "$1" "source ~/.bashrc; cd \"$2\"; \$SHELL --login"; }
 
 function qssh() {
     
@@ -25,7 +27,7 @@ function qssh() {
     function qssh-import() {
         if [[ "$1" == "-o" ]] || [[ "$1" == "--force" ]] || [[ "$1" == "-overwrite" ]]; then
             shift
-            cp -f $1 "${QSSH_CONFIG_FILE}"
+            cp -f "$1" "${QSSH_CONFIG_FILE}"
         fi
 
         # Rebuild map from file to avoid stale entries after add/remove/import.
@@ -34,7 +36,7 @@ function qssh() {
         while IFS=, read -r name addr
         do
             QSSH_HOSTS["$name"]="$addr"
-        done < $1
+        done < "$1"
     }
     
     if [[ ! -f "${QSSH_CONFIG_FILE}" ]]; then
@@ -138,9 +140,9 @@ function qssh() {
                 echo -e "${WARNING_TEXT}: The path name already exists in the configuration file!"
                 echo -e "Skipping addition of path to configuration file."
             elif [[ ! -z "${QSSH_HOSTS["${host_name}"]}" ]] || \
-                 [[ "$(ssh -t "${QSSH_HOSTS["${host_name}"]}" "[[ -d \"${host_path}\" ]]; echo $?")" == "0" ]]
+                  [[ "$(ssh -t "${QSSH_HOSTS["${host_name}"]}" "[[ -d \"${host_path}\" ]]; echo \$?")" == "0" ]]
             then
-                echo -e "${ERROR_TEXT}: Remote directory doesn't exist on host!"
+                echo -e "${ERROR_TEXT:-ERROR}: Remote directory doesn't exist on host!"
                 echo -e "Skipping addition of path to configuration file."
             else
                 echo "${host_name}:${name},${addr}" >> "${QSSH_CONFIG_FILE}"
@@ -155,7 +157,7 @@ function qssh() {
         # 2. Remove name from config
 
         if [[ ! "$1" =~ ":" ]]; then
-            rm -rf "${QSSH_CONFIG_DIR}/$1" "${QSSH_CONFIG_DIR}/$1.pub"
+            rm -rf "${QSSH_CONFIG_DIR:?}/$1" "${QSSH_CONFIG_DIR:?}/$1.pub"
             qssh-sed-inplace "/^$1/d" "${QSSH_CONFIG_FILE}"
         else
             qssh-sed-inplace "/^$1/d" "${QSSH_CONFIG_FILE}"
@@ -164,7 +166,7 @@ function qssh() {
     
     # Purge the qssh config file
     function qssh-purge() {
-        rm -rf "${QSSH_CONFIG_DIR}/*"
+        rm -rf "${QSSH_CONFIG_DIR:?}"/*
         touch "${QSSH_CONFIG_FILE}"
     }
 
@@ -205,8 +207,10 @@ function qssh() {
 
     # Secure copy a file to or from a qssh host
     function qssh-scp() {
-        local from_file="$(qssh-eval-scp-path "$1")" || return 1
-        local to_file="$(qssh-eval-scp-path "$2")" || return 1
+        local from_file
+        local to_file
+        from_file="$(qssh-eval-scp-path "$1")" || return 1
+        to_file="$(qssh-eval-scp-path "$2")" || return 1
 
         shift 2
         [[ "$1" == "--" ]] && shift
@@ -216,7 +220,8 @@ function qssh() {
     
     # Copy an ssh key to clipboard
     function qssh-get-key() {
-        local pub_key="$(cat "${QSSH_CONFIG_DIR}/$1.pub")"
+        local pub_key
+        pub_key="$(cat "${QSSH_CONFIG_DIR}/$1.pub")"
         echo "${pub_key}" | xclip -selection clipboard
         echo "${INFORMATION_TEXT}: Contents of ${QSSH_CONFIG_DIR}/$1.pub copied to clipboard."
     }
@@ -292,4 +297,4 @@ function qssh() {
     qssh-import "${QSSH_CONFIG_FILE}"
 }
 
-qssh help 2>&1 > /dev/null
+qssh help > /dev/null 2>&1

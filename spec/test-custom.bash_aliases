@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# shellcheck disable=SC1091
+# shellcheck disable=SC1091,SC2329
 source ../modules/custom.bash_aliases
 
 test_custom_aliases_are_defined() {

@@ -2,6 +2,8 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+# shellcheck shell=bash
+
 # ===== ENTER ===== #
 
 # Define the path to this repository
@@ -15,16 +17,19 @@ export BASHRC_PATH=""
 # Various operating systems use different hostnames, attempt each one
 
 if command -v scutil >/dev/null 2>&1; then
-    export device_name=$(scutil --get ComputerName) # MacOS
+    device_name="$(scutil --get ComputerName)" # MacOS
+    export device_name
 elif command -v hostnamectl >/dev/null 2>&1 && [[ -d /run/systemd/system ]]; then
-    export device_name=$(hostnamectl --static 2>/dev/null) # Linux with systemd
+    device_name="$(hostnamectl --static 2>/dev/null)" # Linux with systemd
+    export device_name
 fi
 
 if [[ -z "$device_name" ]] && command -v hostname >/dev/null 2>&1; then
-    export device_name=$(hostname 2>/dev/null) # Generic fallback
+    device_name="$(hostname 2>/dev/null)" # Generic fallback
+    export device_name
 fi
 
-if [ ! -z $BASHRC_TEST_MODE ] && [ $BASHRC_TEST_MODE -eq 1 ]; then
+if [[ -n "${BASHRC_TEST_MODE:-}" ]] && [[ "${BASHRC_TEST_MODE}" -eq 1 ]]; then
     device_name="test"
 fi
 
@@ -43,6 +48,7 @@ export BASH_PROFILE="none"
 
 for profile in "${profile_substrings[@]}"; do
     if [[ "$device_name" =~ .*"$profile".* ]]; then
+        # shellcheck disable=SC1090
         . "${BASHRC_PATH}/profiles/${profile}.bash_profile"
         export BASH_PROFILE="${profile}"
         break
@@ -54,10 +60,11 @@ profile_enter
 # ===== RUN ALIASES ===== #
 
 # Run all available bash aliases in main repo directory
-alias_files=($BASHRC_PATH/modules/*.bash_aliases)
+alias_files=("$BASHRC_PATH"/modules/*.bash_aliases)
 
 for alias in "${alias_files[@]}"; do
-    if [[ ! ":$BASHRC_IGNORE_MODULES:" =~ .*":$alias:".* ]]; then
+    if [[ ! ":${BASHRC_IGNORE_MODULES:-}:" =~ :"$alias": ]]; then
+        # shellcheck disable=SC1090
         . "${alias}"
     fi
 done
@@ -69,10 +76,11 @@ shopt -s expand_aliases
 # ===== RUN RCS ===== #
 
 # Run all available .bashrc in main repo directory
-bashrc_files=($BASHRC_PATH/modules/*.bashrc)
+bashrc_files=("$BASHRC_PATH"/modules/*.bashrc)
 
 for bashrc in "${bashrc_files[@]}"; do
-    if [[ ! ":$BASHRC_IGNORE_MODULES:" =~ .*":$bashrc:".* ]]; then
+    if [[ ! ":${BASHRC_IGNORE_MODULES:-}:" =~ :"$bashrc": ]]; then
+        # shellcheck disable=SC1090
         . "${bashrc}"
     fi
 done

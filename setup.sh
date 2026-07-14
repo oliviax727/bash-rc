@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export BASHRC_PATH="${SCRIPT_DIR}"
 
@@ -21,12 +23,10 @@ shopt -s expand_aliases
 source "${BASHRC_PATH}/modules/bash-rc.bashrc"
 
 if [ -z "$1" ]; then
-    read -p "Would you like to install the unstable version? (y/[n])? " response
+    read -r -p "Would you like to install the unstable version? (y/[n])? " response
 else
     response="${1#-}"
 fi
-
-version="main"
 
 if [ "$response" == "y" ]; then
     bash-rc build -f -p -c "$(git branch -r --list "origin/main" | cut -c 10-)"
@@ -35,5 +35,6 @@ else
 fi
 
 if [[ $- == *i* ]]; then
+    # shellcheck source=/dev/null
     reset && source ~/.bashrc
 fi

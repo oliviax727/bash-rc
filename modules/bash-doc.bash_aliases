@@ -22,7 +22,7 @@ alias j="jobs"
 #
 alias unsetenv=unset
 function setenv () {
-  export $1="$2"
+    export "$1=$2"
 }
 
 # Function which adds an alias to the current shell and to
@@ -30,9 +30,9 @@ function setenv () {
 add-alias ()
 {
    local name=$1 value="$2"
-   echo alias $name=\'$value\' >>~/.bash_aliases
-   eval alias $name=\'$value\'
-   alias $name
+    echo "alias $name='$value'" >>~/.bash_aliases
+    eval "alias $name='$value'"
+    alias "$name"
 }
 
 # "repeat" command.  Like:
@@ -40,22 +40,22 @@ add-alias ()
 #	repeat 10 echo foo
 repeat ()
 { 
-    local count="$1" i;
+    local count="$1"
     shift;
-    for i in $(_seq 1 "$count");
+    for _ in $(_seq 1 "$count");
     do
-        eval "$@";
+        "$@"
     done
 }
 
 # Subfunction needed by `repeat'.
 _seq ()
 { 
-    local lower upper output;
+    local lower upper;
     lower=$1 upper=$2;
 
-    if [ $lower -ge $upper ]; then return; fi
-    while [ $lower -lt $upper ];
+    if [ "$lower" -ge "$upper" ]; then return; fi
+    while [ "$lower" -lt "$upper" ];
     do
 	echo -n "$lower "
         lower=$(($lower + 1))

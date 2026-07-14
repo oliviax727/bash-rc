@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 profile_enter() { :; }
 
 profile_alias() { :; }

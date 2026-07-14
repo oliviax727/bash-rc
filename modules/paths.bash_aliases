@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # Java SDK
 export JAVA_HOME=/usr/lib/jvm/java-16-openjdk-amd64
 

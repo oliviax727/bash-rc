@@ -4,8 +4,8 @@ function sshcd () { ssh -t $1 "source ~/.bashrc; cd $2; \$SHELL --login"; }
 
 function qssh() {
     
-    local CONFIG_FILE="${HOME}/.config/qssh.csv"
-    local CONFIG_DIR="${HOME}/.config/qssh-keys"
+    local CONFIG_FILE="${HOME}/.config/qssh/qssh.csv"
+    local CONFIG_DIR="${HOME}/.config/qssh"
     
     # Load a specific configuration file from the environment
     function qssh-import() {
@@ -78,7 +78,7 @@ function qssh() {
         local addr="$2"
 
         # Check path
-        [[ "$2" =~ ":" ]]
+        [[ ! "$2" =~ ":" ]]
         local path_flag="$?"
 
         # Only create a key if the path flag is false
@@ -124,22 +124,68 @@ function qssh() {
     function qssh-remove() {
         # 1. Remove SSH key
         # 2. Remove name from config
-        :
+
+        if [[ ! "$1" =~ ":" ]]; then
+            rm -rf "${CONFIG_DIR}/$1" "${CONFIG_DIR}/$1.pub"
+            sed -i "/^$1/d" "${CONFIG_FILE}"
+        else
+            sed -i "/^$1/d" "${CONFIG_FILE}"
+        fi
     }
     
     # Purge the qssh config file
     function qssh-purge() {
-        > "${CONFIG_FILE}"
+        rm -rf "${CONFIG_DIR}/*"
+        touch "${CONFIG_FILE}"
+    }
+
+    # Evaluate and return a valid qssh scp path
+    function qssh-eval-scp-path() {
+        local full_name
+        local host_name
+        local path_name
+
+        if [[ "$1" =~ ":" ]]; then
+            full_name="$1"
+            remote_arr="$(qssh-split-by-colon "${full_name}")"
+            host_name="${remote_arr[0]}"
+            path_name="${remote_arr[1]}"
+        else
+            full_name="$1"
+            host_name="$1"
+            path_name=""
+        fi
+
+        if [[ ! -z "${SSH_HOSTS["${full_name}"]}" ]]; then
+            # Host AND directory are valid names
+            echo "${SSH_HOSTS["${full_name}"]}"
+        elif [[ ! -z "${SSH_HOSTS["${host_name}"]}" ]]; then
+            # Host is a valid name AND path is an actual path
+            echo "${SSH_HOSTS["${host_name}"]}:${path_name}"
+        elif [[ -d "$(evalpath "${full_name}")" ]]; then
+            # Parameter is a valid local path
+            echo "$(evalpath "${full_name}")"
+        else
+            echo "${ERROR_TEXT}: Specified origin is neither a valid local or remote directory."
+            return 1
+        fi
     }
     
     # Secure copy a file to or from a qssh host
     function qssh-scp() {
-        :
+        local from_file="$(qssh-eval-scp-path "$1")"
+        local to_file="$(qssh-eval-scp-path "$2")"
+
+        shift; shift; shift;
+
+        scp "$@" "${from_file}" "${to_file}"
     }
     
     # Copy an ssh key to clipboard
     function qssh-get-key() {
-        :
+        local pub_key="$(cat "${CONFIG_DIR}/$1.pub")"
+        echo "${pub_key}" | xclip -selection clipboard
+        echo "${INFORMATION_TEXT}: Contents of ${CONFIG_DIR}/$1.pub copied to clipboard."
     }
     
     # List available host/path names
@@ -163,7 +209,7 @@ function qssh() {
         echo "         (<local_path> | <host_name>:[<path>|<path_name>])"
         echo "         [-- <scp_args>]"
         echo " "
-        echo "qssh remove <host_or_path_name>"
+        echo "qssh remove <host_name>[:<path_name>]"
         echo " "
         echo "qssh import [-o] <config_file>"
         echo " "
@@ -178,7 +224,7 @@ function qssh() {
         echo "connect                Connect to an SSH host"
         echo "add                    Add/Modify an SSH host or directory to the quick-access name list"
         echo "scp                    Copy files to and from host"
-        echo "remove                 Remove a named host or file path or ssh key"
+        echo "remove                 Remove a named host (and all associated file paths) or specific file path"
         echo "import                 Import a pre-existing configuration file and create relevant keys"
         echo "get-key                Copy host/path SSH key to clipboard (requires xclip)"
         echo "list                   List existing saved hosts and paths"

@@ -27,14 +27,13 @@ function evalpath() {
         elif [[ "$arg" =~ $VALID_PATH ]]; then
             # Replace all instances of HOME with ~
             local arg_no_home="${arg/#~/${HOME}}"
-            
 
-            # First remove all protected spaces
-            local arg_unsafe="${arg_no_home/\\\ /\ }"
+            # First remove all protected unsafe characters
+            local arg_unsafe="${arg_no_home/(\\)([^a-zA-Z0-9\_\-\.])/\2/g}"
 
             # Then add back all protected spaces
-            local arg_safe=${arg_unsafe/ /\\ }
-            
+            local arg_safe="${arg_unsafe/([^a-zA-Z0-9\_\-\.])/\\\1}"
+
             arguments="$arguments:$arg_safe"
         fi
     done

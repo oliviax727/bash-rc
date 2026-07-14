@@ -1,6 +1,6 @@
 # Module Unit Test Specifications
 
-## OSKAR-bash
+## `OSKAR`-bash
 
 | Function | Description |
 | --- | --- |
@@ -61,7 +61,7 @@
 
 | Function | Description |
 | --- | --- |
-| `test_paths_exports_core_variables` | Checks expected environment variables are exported with expected values. |
+| `test_paths_exports_core_variables` | Checks expected environment variables are exported with the expected values. |
 | `test_paths_prepends_expected_go_binary_path` | Verifies `PATH` begins with `/usr/local/go/bin` after sourcing. |
 | `test_paths_defines_clipboard_alias` | Confirms `cc` clipboard alias is defined. |
 
@@ -83,9 +83,9 @@
 
 | Function | Description |
 | --- | --- |
-| `N/A` | No unit tests were added by request; [spec/test-python.bashrc](spec/test-python.bashrc) is intentionally blank. |
+| `N/A` | No unit tests were added by request; [spec/test-python.bashrc](../spec/test-python.bashrc) is intentionally blank. |
 
-## Git Helpers
+## `Git` Helpers
 
 | Function | Description |
 | --- | --- |
@@ -107,7 +107,7 @@
 | `test_qssh_help_runs_without_error` | Confirms `qssh help` runs without error. |
 | `test_qssh_unknown_command_fails` | Verifies unknown `qssh` subcommands fail with non-zero status. |
 | `test_qssh_add_creates_entry_with_stubbed_key_setup` | Verifies `qssh add` writes host entries using stubbed key generation/copy commands. |
-| `test_qssh_connect_uses_saved_host` | Confirms `qssh connect` resolves saved host names and invokes SSH with expected arguments. |
+| `test_qssh_connect_uses_saved_host` | Confirms `qssh connect` resolves saved host names and invokes `SSH` with expected arguments. |
 | `test_qssh_scp_resolves_remote_and_local_paths` | Verifies `qssh scp` resolves saved-host remote paths and local paths before calling `scp`. |
 | `test_qssh_get_key_pipes_pubkey_to_xclip` | Confirms `qssh get-key` reads the `.pub` key and pipes it to `xclip`. |
 
@@ -179,7 +179,7 @@
 # Untestable Cases
 
 - `admiral` integration paths requiring real block devices, mounts, `sudo`, and `chroot` user switching are not unit-testable in current harness.
-- `oskar-bash` end-to-end execution against real OSKAR binaries/singularity images is treated as integration testing and is stubbed in unit tests.
+- `oskar-bash` end-to-end execution against real `OSKAR` binaries and singularity images is treated as integration testing and is stubbed in unit tests.
 - `python.bashrc` conda initialisation path is intentionally left without unit tests by request (would otherwise require conda executable/environment integration checks).
 - `qssh` live host connectivity, real key exchange, and real `scp` network transfer behaviour are integration-level and are stubbed in unit tests.
 - `bash-rc.bashrc` live git-network operations (clone/fetch/reset/switch/push against remote) are integration-level and are stubbed in unit tests.

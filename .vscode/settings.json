@@ -5,5 +5,20 @@
     "--exclude=SC1091",
     "-S",
     "info"
+  ],
+  "ltex.language": "en-AU",
+  "ltex.enabled": [
+    "markdown"
+  ],
+  "ltex.additionalRules.enablePickyRules": false,
+  "ltex.dictionary": {
+    "en-AU": [
+      "bash-rc",
+      "ShellCheck"
+    ]
+  },
+  "ltex.dictionary.en-AU": [
+    "ShellCheck",
+    "bash-rc"
   ]
 }

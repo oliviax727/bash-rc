@@ -40,7 +40,7 @@ function qssh() {
     # <config_file>={NAME,SERVER\n}
     #                            ^ Important to have newline after every entry and before EOF
 
-    declare -A SSH_HOSTS
+    declare -A QSSH_HOSTS
     qssh-import "${CONFIG_FILE}"
 
     # Split qssh name/addres
@@ -56,11 +56,12 @@ function qssh() {
             local remote_arr="$(qssh-split-by-colon "$1")"
             sshcd "${remote_arr[@]}"
         else
-            ssh "${SSH_HOSTS["$1"]}"
+            ssh "${QSSH_HOSTS["$1"]}"
         fi
     }
     
     alias qsc='qssh-connect'
+    export QSSH_HOSTS
     
     # Add or modify a qssh host
     function qssh-add() {
@@ -88,7 +89,7 @@ function qssh() {
             if [[ ! -f "${HOME}/.ssh/${name}.pub" ]]; then
                 echo -e "${WARNING_TEXT}: The SSH key already exists in the configuration directory!"
                 echo -e "Skipping creation of SSH key and addition to remote host."
-            elif [[ ! -z "${SSH_HOSTS[${name}]}" ]]; then
+            elif [[ ! -z "${QSSH_HOSTS[${name}]}" ]]; then
                 echo -e "${WARNING_TEXT}: The host name already exists in the configuration file!"
                 echo -e "Skipping creation of SSH key and addition to remote host."
             else
@@ -107,10 +108,12 @@ function qssh() {
             local host_path="${remote_arr[1]}"
 
             # Add remote path to config file. Does not check if it's a valid directory
-            if [[ ! -z "${SSH_HOSTS["${host_name}:${name}"]}" ]]; then
+            if [[ ! -z "${QSSH_HOSTS["${host_name}:${name}"]}" ]]; then
                 echo -e "${WARNING_TEXT}: The path name already exists in the configuration file!"
                 echo -e "Skipping addition of path to configuration file."
-            elif [[ "$(ssh -t $SETONIX "[[ -d \"${host_path}\" ]]; echo $?")" == "0" ]]; then
+            elif [[ ! -z "${QSSH_HOSTS["${host_name}"]}" ]] || \
+                 [[ "$(ssh -t "${QSSH_HOSTS["${host_name}"]}" "[[ -d \"${host_path}\" ]]; echo $?")" == "0" ]]
+            then
                 echo -e "${ERROR_TEXT}: Remote directory doesn't exist on host!"
                 echo -e "Skipping addition of path to configuration file."
             else
@@ -156,12 +159,12 @@ function qssh() {
             path_name=""
         fi
 
-        if [[ ! -z "${SSH_HOSTS["${full_name}"]}" ]]; then
+        if [[ ! -z "${QSSH_HOSTS["${full_name}"]}" ]]; then
             # Host AND directory are valid names
-            echo "${SSH_HOSTS["${full_name}"]}"
-        elif [[ ! -z "${SSH_HOSTS["${host_name}"]}" ]]; then
+            echo "${QSSH_HOSTS["${full_name}"]}"
+        elif [[ ! -z "${QSSH_HOSTS["${host_name}"]}" ]]; then
             # Host is a valid name AND path is an actual path
-            echo "${SSH_HOSTS["${host_name}"]}:${path_name}"
+            echo "${QSSH_HOSTS["${host_name}"]}:${path_name}"
         elif [[ -d "$(evalpath "${full_name}")" ]]; then
             # Parameter is a valid local path
             echo "$(evalpath "${full_name}")"

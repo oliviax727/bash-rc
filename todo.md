@@ -1,5 +1,4 @@
 TO DO:
-- Complete qssh module
 - Fix linting errors
 - Create `setup-root.sh` and rename `setup.bash`'s extension
 

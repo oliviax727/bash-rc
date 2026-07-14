@@ -1,7 +1,3 @@
-# Setonix
-alias setonix='ssh ohrw@setonix.pawsey.org.au'
-export SETONIX='ohrw@setonix.pawsey.org.au'
-
 # Java SDK
 export JAVA_HOME=/usr/lib/jvm/java-16-openjdk-amd64
 

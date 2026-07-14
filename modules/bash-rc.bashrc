@@ -13,12 +13,14 @@ function bash-rc() {
 
         local check_path=$([ -z $1 ] && echo "$BASHRC_PATH" || echo "$(evalpath -sm $1)")
 
-        local repo_string='[ -d "$check_path" ]
-            && [ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" == true ]
-            && basename -s ".git" `git config --get remote.origin.url`
-            || echo "error"'
+        local repo_name="error"
 
-        local repo_name=$(cd-run "${check_path}" "$repo_string")
+        if [ -d "${check_path}" ] && git -C "${check_path}" -c safe.directory="${check_path}" rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+            local remote_url="$(git -C "${check_path}" -c safe.directory="${check_path}" config --get remote.origin.url 2> /dev/null)"
+            if [ -n "${remote_url}" ]; then
+                repo_name="$(basename -s ".git" "${remote_url}")"
+            fi
+        fi
 
         if [ ! "${repo_name}" == 'bash-rc' ]; then
             [ $check_null -eq 1 ] && return 0
@@ -58,13 +60,13 @@ function bash-rc() {
 
     # Load repository from upstream
     function bash-rc-update() {
-        cd-run "$BASHRC_PATH" "(git fetch && git reset --hard origin/main) >/dev/null"
+        (git -C "$BASHRC_PATH" -c safe.directory="$BASHRC_PATH" fetch && git -C "$BASHRC_PATH" -c safe.directory="$BASHRC_PATH" reset --hard origin/main) >/dev/null
     }
 
     # Checkout different branch in bash-rc file
     function bash-rc-checkout() {
         bash-rc-update
-        cd-run "$BASHRC_PATH" "git switch $1 >/dev/null"
+        git -C "$BASHRC_PATH" -c safe.directory="$BASHRC_PATH" switch "$1" >/dev/null
     }
 
     # Clone repository in chosen directory

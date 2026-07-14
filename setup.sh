@@ -1,6 +1,6 @@
 export BASHRC_PATH=$(pwd)
 
-mkdir -p archive
+mkdir -p "archive_$(whoami)"
 
 source enter.bash
 source modules/custom.bash_aliases

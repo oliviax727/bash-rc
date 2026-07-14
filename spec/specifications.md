@@ -79,6 +79,27 @@
 | `test_term_col_alias_is_defined` | Confirms `term_col` alias is defined. |
 | `test_cleanpath_removes_duplicates_and_invalid_entries` | Verifies `cleanpath` removes blank/invalid entries and duplicates while preserving valid order. |
 
+## Python
+
+| Function | Description |
+| --- | --- |
+| `N/A` | No unit tests were added by request; [spec/test-python.bashrc](spec/test-python.bashrc) is intentionally blank. |
+
+## Git Helpers
+
+| Function | Description |
+| --- | --- |
+| `test_git_propagate_runs_without_error_with_stubbed_git` | Verifies `git-propagate` runs successfully with a stubbed git backend. |
+| `test_git_propagate_attempts_cherry_pick_when_other_branches_exist` | Confirms propagation attempts cherry-pick and push operations when additional branches are present. |
+
+## CPP Modules
+
+| Function | Description |
+| --- | --- |
+| `test_init_cpp_creates_source_and_binaries` | Verifies `init-cpp` creates source and both normal/debug binaries. |
+| `test_run_cpp_compiles_and_executes_output_binary` | Verifies `run-cpp` compiles and executes the generated output binary. |
+| `test_debug_cpp_invokes_gdb_with_debug_binary` | Verifies `debug-cpp` calls `gdb` with the expected debug executable path. |
+
 
 # Additional Unit Test Specifications
 
@@ -89,3 +110,4 @@ No parent-directory test files recorded yet.
 
 - `admiral` integration paths requiring real block devices, mounts, `sudo`, and `chroot` user switching are not unit-testable in current harness.
 - `oskar-bash` end-to-end execution against real OSKAR binaries/singularity images is treated as integration testing and is stubbed in unit tests.
+- `python.bashrc` conda initialization path is intentionally left without unit tests by request (would otherwise require conda executable/environment integration checks).

@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+teardown() {
+    rm -rf ./base-test.* ./base-output.*
+}
+
 prepare_base_harness() {
     local root
     root=$(mktemp -d "./base-test.XXXXXX")

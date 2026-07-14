@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+teardown() {
+  rm -rf ./setup-sandbox.* ./setup-home.* ./setup-bin.*
+  rm -f ./setup-su-log.*
+}
+
 run_with_5s_timeout() {
   if command -v timeout >/dev/null 2>&1; then
     timeout 5 "$@"

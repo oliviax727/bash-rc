@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+teardown() {
+    rm -f ./exit-log.*
+}
+
 test_exit_sources_without_error_or_output() {
     local log_file
     log_file=$(mktemp "./exit-log.XXXXXX")

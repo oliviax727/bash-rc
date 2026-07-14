@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+teardown() {
+    rm -rf ./bash-rc-test.*
+}
+
 setup_bash_rc_test_env() {
     TEST_BRC_ROOT=$(mktemp -d "./bash-rc-test.XXXXXX")
     TEST_BRC_ROOT=$(realpath -m "$TEST_BRC_ROOT")

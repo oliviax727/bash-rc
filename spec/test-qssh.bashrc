@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+teardown() {
+    rm -rf ./qssh-home.* ./qssh-bin.*
+    rm -f ./qssh-ssh-log.* ./qssh-scp-log.* ./qssh-local.* ./qssh-clip-log.*
+}
+
 test_qssh_help_runs_without_error() {
     local original_home
     local test_home

@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+teardown() {
+    rm -f ./test-profile-out.*
+}
+
 test_unpublished_test_enter_sources_without_error_or_output() {
     local output
     output="$(source ../test/test_enter.bash 2>&1)"

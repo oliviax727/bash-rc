@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+teardown() {
+    rm -f ./profile-out.*
+}
+
 run_profile_file() {
     local profile_file="$1"
     local repo_root

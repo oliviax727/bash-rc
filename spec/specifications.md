@@ -16,7 +16,7 @@
 | --- | --- |
 | `test_admiral_help_runs_without_error` | Confirms `admiral help` executes successfully. |
 | `test_admiral_unknown_command_fails` | Verifies unknown subcommands are rejected with non-zero status. |
-| `test_admiral_normalize_dev_accepts_kernel_and_absolute_names` | Checks device normalization for both `sda1` and `/dev/sda1` forms. |
+| `test_admiral_normalize_dev_accepts_kernel_and_absolute_names` | Checks device normalisation for both `sda1` and `/dev/sda1` forms. |
 | `test_admiral_normalize_dev_rejects_invalid_names` | Confirms invalid device names are rejected. |
 | `test_admiral_resolve_mcp_path_maps_supported_prefixes` | Verifies `root:`, `target:`, `sda:`, `host:`, `sdb:`, and absolute paths map correctly. |
 | `test_admiral_resolve_mcp_path_rejects_invalid_values` | Confirms invalid non-prefixed relative paths fail path resolution. |
@@ -71,7 +71,7 @@
 | --- | --- |
 | `test_test_cmd_returns_success_for_true_expression` | Verifies `test-cmd` returns success for true shell expressions. |
 | `test_test_cmd_returns_failure_for_false_expression` | Verifies `test-cmd` returns failure for false shell expressions. |
-| `test_evalpath_expands_home_tilde` | Checks `evalpath` expands `~` to `HOME` under `realpath -m` behavior. |
+| `test_evalpath_expands_home_tilde` | Checks `evalpath` expands `~` to `HOME` under `realpath -m` behaviour. |
 | `test_evalpath_handles_paths_with_spaces` | Confirms `evalpath` can resolve paths containing spaces safely. |
 | `test_set_cwd_uses_home_shortening_when_twd_disabled` | Verifies `set_CWD` shortens paths under `HOME` to `~` when compression mode is disabled. |
 | `test_set_cwd_compresses_prefix_using_quick_jump_vars` | Verifies `set_CWD` compresses path prefixes using `QUICK_JUMP_VARS` (e.g. `$WORKROOT/...`). |
@@ -90,7 +90,7 @@
 | Function | Description |
 | --- | --- |
 | `test_git_propagate_runs_without_error_with_stubbed_git` | Verifies `git-propagate` runs successfully with a stubbed git backend. |
-| `test_git_propagate_attempts_cherry_pick_when_other_branches_exist` | Confirms propagation attempts cherry-pick and push operations when additional branches are present. |
+| `test_git_propagate_attempts_cherry_pick_when_other_branches_exist` | Confirms propagation attempts to cherry-pick and push operations when additional branches are present. |
 
 ## CPP Modules
 
@@ -99,6 +99,17 @@
 | `test_init_cpp_creates_source_and_binaries` | Verifies `init-cpp` creates source and both normal/debug binaries. |
 | `test_run_cpp_compiles_and_executes_output_binary` | Verifies `run-cpp` compiles and executes the generated output binary. |
 | `test_debug_cpp_invokes_gdb_with_debug_binary` | Verifies `debug-cpp` calls `gdb` with the expected debug executable path. |
+
+## QSSH
+
+| Function | Description |
+| --- | --- |
+| `test_qssh_help_runs_without_error` | Confirms `qssh help` runs without error. |
+| `test_qssh_unknown_command_fails` | Verifies unknown `qssh` subcommands fail with non-zero status. |
+| `test_qssh_add_creates_entry_with_stubbed_key_setup` | Verifies `qssh add` writes host entries using stubbed key generation/copy commands. |
+| `test_qssh_connect_uses_saved_host` | Confirms `qssh connect` resolves saved host names and invokes SSH with expected arguments. |
+| `test_qssh_scp_resolves_remote_and_local_paths` | Verifies `qssh scp` resolves saved-host remote paths and local paths before calling `scp`. |
+| `test_qssh_get_key_pipes_pubkey_to_xclip` | Confirms `qssh get-key` reads the `.pub` key and pipes it to `xclip`. |
 
 
 # Additional Unit Test Specifications
@@ -110,4 +121,5 @@ No parent-directory test files recorded yet.
 
 - `admiral` integration paths requiring real block devices, mounts, `sudo`, and `chroot` user switching are not unit-testable in current harness.
 - `oskar-bash` end-to-end execution against real OSKAR binaries/singularity images is treated as integration testing and is stubbed in unit tests.
-- `python.bashrc` conda initialization path is intentionally left without unit tests by request (would otherwise require conda executable/environment integration checks).
+- `python.bashrc` conda initialisation path is intentionally left without unit tests by request (would otherwise require conda executable/environment integration checks).
+- `qssh` live host connectivity, real key exchange, and real `scp` network transfer behaviour are integration-level and are stubbed in unit tests.

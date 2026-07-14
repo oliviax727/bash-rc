@@ -1,0 +1,1 @@
+{"rule":"MORFOLOGIK_RULE_EN_AU","sentence":"^\\Q\\E(?:Dummy|Ina|Jimmy-|Dummy-|Maniquí-|Maniquíes-|Atrapa-|Dummy\\+|Dummy's\\+)[0-9]+\\Q No unit tests were added by request; spec/test-python.bashrc is intentionally blank.\\E$"}

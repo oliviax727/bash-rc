@@ -112,9 +112,43 @@
 | `test_qssh_get_key_pipes_pubkey_to_xclip` | Confirms `qssh get-key` reads the `.pub` key and pipes it to `xclip`. |
 
 
-# Additional Unit Test Specifications
+# Primary Unit Test Specifications
 
-No parent-directory test files recorded yet.
+## Bash-RC Core Module
+
+| Function | Description |
+| --- | --- |
+| `test_bash_rc_help_runs_without_error` | Confirms `bash-rc help` runs without error. |
+| `test_bash_rc_unknown_command_fails` | Verifies unknown `bash-rc` subcommands fail with non-zero status. |
+| `test_bash_rc_archive_copies_home_bashrc` | Confirms `bash-rc archive` writes an archive copy of `~/.bashrc`. |
+| `test_bash_rc_publish_alias_copies_test_file_into_modules` | Verifies `bash-rc publish alias <name>` copies test alias files into the `modules` directory. |
+| `test_bash_rc_purge_clears_archive_files` | Confirms `bash-rc purge` removes archived `.bashrc` files. |
+| `test_bash_rc_build_replaces_home_bashrc_from_ready_file` | Verifies `bash-rc build -f` rebuilds and replaces `~/.bashrc` from repository base content. |
+
+## Base Script
+
+| Function | Description |
+| --- | --- |
+| `test_base_sources_without_error_or_output_in_test_mode` | Confirms a test-mode `base` load can source without errors or user-visible output while selecting the test profile. |
+| `test_base_loads_in_expected_order_and_honours_ignore_modules` | Verifies load order (`enter` ⇾ aliases ⇾ bash-rc modules ⇾ `exit`) and that ignored module paths are skipped. |
+
+## Enter Script
+
+| Function | Description |
+| --- | --- |
+| `test_enter_sources_without_error_or_output` | Confirms `enter.bash` sources cleanly without error or user-visible output. |
+| `test_enter_exports_expected_prompt_variables` | Verifies `INFORMATION_TEXT`, `WARNING_TEXT`, `ERROR_TEXT`, and `PROMPT_COMMAND` are set as expected. |
+
+## Exit Script
+
+| Function | Description |
+| --- | --- |
+| `test_exit_sources_without_error_or_output` | Confirms `exit.bash` sources cleanly and calls `cleanpath` for default and ignore-module cleanup. |
+
+## Custom Profiles
+
+
+## Unpublished Tests
 
 
 # Untestable Cases
@@ -123,3 +157,5 @@ No parent-directory test files recorded yet.
 - `oskar-bash` end-to-end execution against real OSKAR binaries/singularity images is treated as integration testing and is stubbed in unit tests.
 - `python.bashrc` conda initialisation path is intentionally left without unit tests by request (would otherwise require conda executable/environment integration checks).
 - `qssh` live host connectivity, real key exchange, and real `scp` network transfer behaviour are integration-level and are stubbed in unit tests.
+- `bash-rc.bashrc` live git-network operations (clone/fetch/reset/switch/push against remote) are integration-level and are stubbed in unit tests.
+- Ignore-list behaviour in `base.bash` is currently controlled by `BASHRC_IGNORE_MODULES` (path list), not `BASHRC_IGNORE_PATH`.

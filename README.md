@@ -27,7 +27,7 @@ cd bash-rc
 
 ### Root-assisted setup
 
-If you want setup to run through `su`:
+If you want setup to run with elevated privileges (prefers `sudo`, falls back to `su`):
 
 ```bash
 ./setup_root.sh

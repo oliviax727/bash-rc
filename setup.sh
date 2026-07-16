@@ -3,16 +3,6 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export BASHRC_PATH="${SCRIPT_DIR}"
 
-# Compatibility wrapper for BSD-style `sed -i ''` calls used by bash-rc helpers.
-sed() {
-    if [[ "$1" == "-i" ]] && [[ "${2:-}" == "" ]]; then
-        shift 2
-        command sed -i "$@"
-    else
-        command sed "$@"
-    fi
-}
-
 mkdir -p "archive_$(whoami)"
 
 source "${BASHRC_PATH}/enter.bash"

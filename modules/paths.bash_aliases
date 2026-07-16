@@ -20,7 +20,7 @@ export OSKAR_LIB_DIR="${HOME}/.oskar/OSKAR-2.12.2"
 export PATH="$PATH:${HOME}/.local/bin"
 
 export GOPATH=${HOME}/go
-export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin
+export PATH="/usr/local/go/bin:${PATH}:${GOPATH}/bin"
 
 # Pylint Path
 export PYLINT_VENV_PATH=.venv:.virtualenv

@@ -172,7 +172,7 @@ function cleanpath() {
         [ -z "${SPATH[${ABS_PATH}]}" ] || continue
 
         # By this point no dupe was found and directory exists
-        SPATH[${ABS_PATH}]=${#SPATH[*]}
+        SPATH[${ABS_PATH}]="${#SPATH[*]}"
 
         # Reconstruct the $PATH
         if [ -z "$RET_VAL" ]
@@ -181,6 +181,6 @@ function cleanpath() {
         fi
     done
 
-    eval "$PATH_VAR_NAME=$RET_VAL"
-    eval "export $PATH_VAR_NAME"
+    # Assign dynamically without eval so path entries containing spaces are preserved.
+    declare -gx "${PATH_VAR_NAME}=${RET_VAL}"
 }

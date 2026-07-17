@@ -2,16 +2,6 @@
 
 # ===== BASH-RC PACKAGE MODULES ===== #
 
-# Compatibility wrapper for BSD-style `sed -i ''` calls used by bash-rc helpers.
-sed() {
-    if [[ "$1" == "-i" ]] && [[ "${2:-}" == "" ]]; then
-        shift 2
-        command sed -i "$@"
-    else
-        command sed "$@"
-    fi
-}
-
 function bash-rc() {
 
     # Cross-platform in-place sed edit: GNU sed supports -i, BSD sed requires -i ''.

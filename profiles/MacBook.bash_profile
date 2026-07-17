@@ -14,6 +14,13 @@ profile_enter() {
 
     # Uncomment if using default paths is prefered
     export force_set_TWD=yes
+
+    # Use gnu-sed
+    export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:${PATH}"
+    export HOMEBREW_NO_ENV_HINTS=1
+
+    # Auto-Update Brew
+    alias update-brew='brew update && brew outdated && brew upgrade && brew cleanup'
 }
 
 profile_exit() {

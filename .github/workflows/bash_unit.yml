@@ -16,7 +16,14 @@ jobs:
         sudo apt-get install -y shellcheck
     - name: Lint shell scripts with ShellCheck
       run: |
-        shellcheck --norc --exclude=SC1091 -S info -P SCRIPTDIR -P . -f gcc $(git ls-files '*.sh' '*.bash' '*.bashrc' '*.bash_aliases' '*.bash_profile' 'bash_unit')
+        entry_files=$(git ls-files '*.sh' '*.bash' '*.bash_profile' 'bash_unit')
+        module_files=$(git ls-files 'modules/*.bashrc' 'modules/*.bash_aliases')
+
+        # Lint entry scripts strictly.
+        shellcheck --norc --exclude=SC1091 -S info -P SCRIPTDIR -P . -f gcc $entry_files
+
+        # Module files are sourced libraries; SC2317 is noisy in this context.
+        shellcheck --norc --exclude=SC1091,SC2317 -S info -P SCRIPTDIR -P . -f gcc $module_files
     - name: Unit testing with bash_unit
       run: |
         curl -s https://raw.githubusercontent.com/bash-unit/bash_unit/master/install.sh | bash

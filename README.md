@@ -63,7 +63,7 @@ The GitHub Actions workflow in `.github/workflows/bash_unit.yml` does the follow
 
 1. Check out the repository.
 2. Install `ShellCheck`.
-3. Lint tracked shell scripts with repository `ShellCheck` settings (`--norc --rcfile=.shellcheckrc --exclude=SC1091 -S info`).
+3. Lint tracked shell scripts in two passes: entry scripts with `--norc --exclude=SC1091 -S info -P SCRIPTDIR -P .`, and sourced `modules/*` files with the same settings plus `SC2317` excluded.
 4. Install and run `bash_unit` against each `spec/test-*` file individually.
 5. Enforce a per-spec timeout (`15s`) and fail with explicit timeout or test-failure annotations.
 

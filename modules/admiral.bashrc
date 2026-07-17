@@ -129,7 +129,9 @@ function admiral() {
 
         if [[ "$bind_runtime" -eq 1 ]]; then
             for p in run sys proc dev; do
-                mountpoint -q "$chroot_dir/$p" && sudo -n umount -R -l "$chroot_dir/$p" 2>/dev/null || true
+                if mountpoint -q "$chroot_dir/$p"; then
+                    sudo -n umount -R -l "$chroot_dir/$p" 2>/dev/null || true
+                fi
             done
         fi
 

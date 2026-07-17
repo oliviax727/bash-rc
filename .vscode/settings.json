@@ -1,10 +1,13 @@
 {
   "shellcheck.customArgs": [
     "--norc",
-    "--rcfile=/home/ohrf/Desktop/Fun/bash-rc/.shellcheckrc",
-    "--exclude=SC1091",
+    "--exclude=SC1091,SC2317",
     "-S",
-    "info"
+    "info",
+    "-P",
+    "SCRIPTDIR",
+    "-P",
+    "."
   ],
   "ltex.language": "en-AU",
   "ltex.enabled": [

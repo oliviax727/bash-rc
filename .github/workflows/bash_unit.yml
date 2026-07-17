@@ -16,7 +16,7 @@ jobs:
         sudo apt-get install -y shellcheck
     - name: Lint shell scripts with ShellCheck
       run: |
-        shellcheck --norc --rcfile=.shellcheckrc --exclude=SC1091 -S info -f gcc $(git ls-files '*.sh' '*.bash' '*.bashrc' '*.bash_aliases' '*.bash_profile' 'bash_unit')
+        shellcheck --norc --exclude=SC1091 -S info -P SCRIPTDIR -P . -f gcc $(git ls-files '*.sh' '*.bash' '*.bashrc' '*.bash_aliases' '*.bash_profile' 'bash_unit')
     - name: Unit testing with bash_unit
       run: |
         curl -s https://raw.githubusercontent.com/bash-unit/bash_unit/master/install.sh | bash

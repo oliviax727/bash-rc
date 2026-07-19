@@ -51,8 +51,6 @@
 
 | Function | Description |
 | --- | --- |
-| `test_paths_exports_core_variables` | Checks expected environment variables are exported with the expected values. |
-| `test_paths_prepends_expected_go_binary_path` | Verifies `PATH` begins with `/usr/local/go/bin` after sourcing. |
 | `test_paths_defines_clipboard_alias` | Confirms `cc` clipboard alias is defined. |
 
 ## Path Manager

@@ -1,33 +1,66 @@
 # Bash-rc
 
-A modular `Bash` setup with profile-aware startup, utility command packs, and reproducible setup and testing.
+A bash project that contains helper modules to use in your terminal.
 
 ## Installation
 
-### Standard user setup
+### Required Software
 
-1. Clone the repository:
+Note that the project is designed to work with both GNU/Linux, BSD, and macOS environments. Some basic software is required to be able to use this repository to the fullest extent.
+
+Required:
+- `bash`
+- `GNU sed` (as the system's `sed` default)
+- `git`
+
+Recommended:
+- `sudo`
+- `openssh`
+- `xclip`
+- `g++`/`gdb`
+- `jupyter`
+- `anaconda`
+- `python3`
+
+Esoteric:
+- `tomcat`
+- `pyenv`
+- `snap`
+
+Development:
+- `shellcheck`
+- `bash_unit`
+
+Esoteric modules are usually present for my own end-user purposes and don't need to be installed. There are likely more modules that need to be installed depending on the specifics of the operating system.
+
+### Setup
+
+Clone the repository:
 
 ```bash
 git clone https://github.com/oliviax727/bash-rc.git
 cd bash-rc
 ```
 
-2. Run setup:
+Run the setup file:
 
 ```bash
 ./setup.sh
 ```
 
-3. Optional unstable install (same as choosing the unstable prompt option):
+### Setup (Unstable)
+
+You can optionally install the unstable version (most recent):
 
 ```bash
 ./setup.sh -y
 ```
 
-### Root-assisted setup
+Or by entering 'y' when prompted.
 
-If you want setup to run with elevated privileges (prefers `sudo`, falls back to `su`):
+### Setup (root user)
+
+To set up the repository for the root user:
 
 ```bash
 ./setup_root.sh
@@ -39,23 +72,22 @@ If you want setup to run with elevated privileges (prefers `sudo`, falls back to
 
 | Module | Purpose |
 | --- | --- |
-| `modules/bash-doc.bash_aliases` | Classic convenience aliases and helper functions such as `setenv`, `repeat`, and `add-alias`. |
-| `modules/custom.bash_aliases` | Custom workflow helpers including `diff-diode`, `cd-run`, and snap cleanup. |
-| `modules/default.bash_aliases` | Interactive shell defaults (history, shell options, prompt/completion, and common aliases). |
-| `modules/paths.bash_aliases` | Environment variable exports and `PATH`/bootstrap aliases (`Java`, `Go`, `OSKAR`, clipboard, and more). |
+| `modules/bash-doc.bash_aliases` | Copied helper functions from `bash-doc`: `setenv`, `repeat`, and `add-alias`. |
+| `modules/custom.bash_aliases` | Custom additional functions like `diff-diode`, `cd-run`, and snap cleanup. |
+| `modules/default.bash_aliases` | The default shell configuration when `bash` is first installed. |
+| `modules/paths.bash_aliases` | Environment variable exports and `PATH` aliases (`Java`, `Go`, `pylint`, clipboard, and more). |
 
-### `.bashrc` modules (`modules/*.bashrc`)
+### Bash-rc modules (`modules/*.bashrc`)
 
 | Module | Purpose |
 | --- | --- |
-| `modules/admiral.bashrc` | Mount/`chroot` and file-copy helper commands for alternate Linux installs. |
-| `modules/bash-rc.bashrc` | Core command surface for building, archiving, updating, publishing, and path management. |
-| `modules/cpp_modules.bashrc` | `C++` initialise/build/run/debug shortcuts using `g++`/`gdb`. |
-| `modules/git_helpers.bashrc` | `Git` automation helper (`git-propagate`) for branch propagation. |
-| `modules/oskar.bashrc` | Wrapper for `OSKAR` local/global/singularity command execution. |
-| `modules/path_manager.bashrc` | Path normalisation, prompt path rendering, terminal colour, and `PATH` deduplication helpers. |
-| `modules/python.bashrc` | `Conda` initialisation block. |
-| `modules/qssh.bashrc` | Named `SSH` host/path manager and quick connect/`scp` tooling. |
+| `modules/admiral.bashrc` | Mount/`chroot` and file-copy into adjacent local Linux installs. |
+| `modules/bash-rc.bashrc` | Primary modules for modifying and updating this project repository. |
+| `modules/cpp_modules.bashrc` | `C++` shortcuts using `g++`/`gdb`. |
+| `modules/git_helpers.bashrc` | `Git` helper functions like `git-propagate` for branch propagation. |
+| `modules/path_manager.bashrc` | Modifying and managing path environment variables, terminal prompts, and path strings. |
+| `modules/python.bashrc` | Any and all things Python. |
+| `modules/qssh.bashrc` | An SSH host/path manager to make connecting to hosts easier. |
 
 ## CI overview
 
@@ -63,9 +95,10 @@ The GitHub Actions workflow in `.github/workflows/bash_unit.yml` does the follow
 
 1. Check out the repository.
 2. Install `ShellCheck`.
-3. Lint tracked shell scripts with `--norc --exclude=SC1091,SC2317 -S info -P SCRIPTDIR -P .`.
+3. Lint the project with `shellcheck`.
 4. Install and run `bash_unit` against each `spec/test-*` file individually.
-5. Enforce a per-spec timeout (`15s`) and fail with explicit timeout or test-failure annotations.
+
+The CI enforces a per-test timeout of 15 seconds, to ensure all modules are responsive.
 
 ## Documentation
 
@@ -78,7 +111,3 @@ All project documentation is in `documents/`:
 - [Customisation guide](documents/customisation-guide.md)
 - [Miscellaneous notes](documents/miscellaneous-notes.md)
 - [Test specifications](documents/specifications.md)
-
-## License
-
-GNU GPLv3. See `LICENSE`.

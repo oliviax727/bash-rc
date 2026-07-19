@@ -1,31 +1,15 @@
 # Customisation Guide
 
-This guide covers how to modify, customise, and personalise this repository without breaking the expected workflow.
+This guide covers how to modify, customise, and personalise this repository.
 
 ## Add Your Own Modules
 
 You can add two module types:
 
-- alias modules in `modules/*.bash_aliases`
-- `.bashrc` modules in `modules/*.bashrc`
+- Alias modules are found in `modules/*.bash_aliases`
+- `.bashrc` modules are found in `modules/*.bashrc`
 
-Recommended workflow:
-
-1. Choose a clear module name.
-2. Create the file in `modules/`.
-3. Keep function names explicit and stable.
-4. Source only what you need.
-5. Keep external side effects minimal.
-
-Example file names:
-
-- `modules/my-tools.bash_aliases`
-- `modules/my-runtime.bashrc`
-
-Notes:
-
-- Modules are autoloaded by `base.bash`.
-- If needed, skip a module temporarily by adding its full path to `BASHRC_IGNORE_MODULES`.
+It is recommended that you first add your code to the files in the `test` directory and publish them using `bash-rc publish`.
 
 ## Customise Existing Modules Safely
 
@@ -45,28 +29,6 @@ shellcheck --norc --rcfile=.shellcheckrc --exclude=SC1091 -S info $(git ls-files
 
 If a change cannot be unit-tested (for example, network, mount, or `chroot` behaviour), document it in [specifications.md](specifications.md).
 
-## Test and Publish Custom Behaviour Using `test/`
-
-Use `test/` as your staging area for behaviour you want to promote.
-
-Staging files:
-
-- `test/test_alias.bash_aliases`
-- `test/test_rc.bashrc`
-- `test/test_enter.bash`
-- `test/test_exit.bash`
-- `test/test_profile.bash_profile`
-
-Publish staged behaviour with `bash-rc`:
-
-```bash
-bash-rc publish alias my_module
-bash-rc publish rc my_module
-bash-rc publish enter
-bash-rc publish exit
-bash-rc publish profile my_profile
-```
-
 After publishing:
 
 1. Re-run the affected specs.
@@ -75,16 +37,16 @@ After publishing:
 
 ## Customisable Profiles
 
-Profiles live in `profiles/*.bash_profile` and are selected by hostname matching.
+Files associated with different profiles are found in `profiles/*.bash_profile` and are selected by looking at a computer's hostname.
 
-A profile can define these hooks:
+A profile must contain these four functions:
 
 - `profile_enter`
 - `profile_alias`
 - `profile_rc`
 - `profile_exit`
 
-Practical profile customisation ideas:
+Some common profile-specific actions:
 
 - set prompt style in `profile_exit`
 - set `QUICK_JUMP_VARS` in `profile_enter`

@@ -1,15 +1,5 @@
 # Module Unit Test Specifications
 
-## `OSKAR`-bash
-
-| Function | Description |
-| --- | --- |
-| `test_oskar_bash_help_runs_without_error` | Confirms `oskar-bash -h` and `oskar-bash --help` execute successfully. |
-| `test_oskar_bash_global_interferometer_runs_without_error` | Verifies global interferometer mode can run when command lookup/execution is stubbed. |
-| `test_oskar_bash_local_binary_runs_without_error` | Creates a temporary local binary path and checks `-l ... -i` executes without failure. |
-| `test_oskar_bash_singularity_runs_without_error` | Stubs singularity execution path and verifies `-s ... -i` branch runs successfully. |
-| `test_oskar_bash_clean_removes_log_files` | Checks `-c` cleans `.log` files in a temporary working directory. |
-
 ## Admiral
 
 | Function | Description |
@@ -83,7 +73,7 @@
 
 | Function | Description |
 | --- | --- |
-| `N/A` | No unit tests were added by request; [spec/test-python.bashrc](../spec/test-python.bashrc) is intentionally blank. |
+| `N/A` | No unit tests were added; [spec/test-python.bashrc](../spec/test-python.bashrc) is intentionally blank. |
 
 ## `Git` Helpers
 
@@ -100,6 +90,16 @@
 | `test_run_cpp_compiles_and_executes_output_binary` | Verifies `run-cpp` compiles and executes the generated output binary. |
 | `test_debug_cpp_invokes_gdb_with_debug_binary` | Verifies `debug-cpp` calls `gdb` with the expected debug executable path. |
 
+## OSKAR
+
+| Function | Description |
+| --- | --- |
+| `test_oskar_bash_help_runs_without_error` | Confirms `oskar-bash -h` and `oskar-bash --help` execute successfully. |
+| `test_oskar_bash_global_interferometer_runs_without_error` | Verifies global interferometer mode can run when command lookup/execution is stubbed. |
+| `test_oskar_bash_local_binary_runs_without_error` | Creates a temporary local binary path and checks `-l ... -i` executes without failure. |
+| `test_oskar_bash_singularity_runs_without_error` | Stubs singularity execution path and verifies `-s ... -i` branch runs successfully. |
+| `test_oskar_bash_clean_removes_log_files` | Checks `-c` cleans `.log` files in a temporary working directory. |
+
 ## QSSH
 
 | Function | Description |
@@ -114,7 +114,7 @@
 
 # Primary Unit Test Specifications
 
-## Bash-RC Core Module
+## Bash-rc Core Module
 
 | Function | Description |
 | --- | --- |
@@ -149,13 +149,13 @@
 
 | Function | Description |
 | --- | --- |
-| `test_profiles_none_sources_and_runs_without_output` | Confirms `profiles/none.bash_profile` sources and its hooks run without error or user-visible output under standard harness settings. |
-| `test_profiles_delll_sources_and_runs_without_output` | Confirms `profiles/delll.bash_profile` sources and its hooks run without error or user-visible output. |
-| `test_profiles_sirius_sources_and_runs_without_output` | Confirms `profiles/Sirius.bash_profile` sources and its hooks run without error or user-visible output. |
-| `test_profiles_setonix_sources_and_runs_without_output` | Confirms `profiles/setonix.bash_profile` sources and its hooks run without error or user-visible output. |
-| `test_profiles_nid_sources_and_runs_without_output` | Confirms `profiles/nid.bash_profile` sources and its hooks run without error or user-visible output. |
-| `test_profiles_macbook_sources_and_runs_without_output` | Confirms `profiles/MacBook.bash_profile` sources and its hooks run without error or user-visible output. |
-| `test_profiles_test_sources_and_runs_without_output` | Confirms `profiles/test.bash_profile` sources and its hooks run without error or user-visible output. |
+| `test_profiles_none_sources_and_runs_without_output` | Confirms `profiles/none.bash_profile` sources run without error or user-visible output under standard harness settings. |
+| `test_profiles_delll_sources_and_runs_without_output` | Confirms `profiles/delll.bash_profile` sources run without error or user-visible output. |
+| `test_profiles_sirius_sources_and_runs_without_output` | Confirms `profiles/Sirius.bash_profile` sources run without error or user-visible output. |
+| `test_profiles_setonix_sources_and_runs_without_output` | Confirms `profiles/setonix.bash_profile` sources run without error or user-visible output. |
+| `test_profiles_nid_sources_and_runs_without_output` | Confirms `profiles/nid.bash_profile` sources run without error or user-visible output. |
+| `test_profiles_macbook_sources_and_runs_without_output` | Confirms `profiles/MacBook.bash_profile` sources run without error or user-visible output. |
+| `test_profiles_test_sources_and_runs_without_output` | Confirms `profiles/test.bash_profile` sources run without error or user-visible output. |
 
 
 ## Unpublished Tests
@@ -166,7 +166,7 @@
 | `test_unpublished_test_alias_sources_without_error_or_output` | Confirms `test/test_alias.bash_aliases` sources without error or user-visible output. |
 | `test_unpublished_test_rc_sources_without_error_or_output` | Confirms `test/test_rc.bashrc` sources without error or user-visible output. |
 | `test_unpublished_test_exit_sources_without_error_or_output` | Confirms `test/test_exit.bash` sources without error or user-visible output. |
-| `test_unpublished_test_profile_sources_and_runs_without_error_or_output` | Confirms `test/test_profile.bash_profile` and its hooks execute without error or user-visible output. |
+| `test_unpublished_test_profile_sources_and_runs_without_error_or_output` | Confirms `test/test_profile.bash_profile` execute without error or user-visible output. |
 
 ## Setup Scripts
 

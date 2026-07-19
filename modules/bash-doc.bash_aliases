@@ -7,9 +7,6 @@ alias ss="ps -aux"
 alias texclean='rm -f *.toc *.aux *.log *.cp *.fn *.tp *.vr *.pg *.ky'
 alias h='history'
 alias j="jobs -l"
-alias l="ls -l "
-alias ll="ls -l"
-alias ls="ls -F"
 alias pu="pushd"
 alias po="popd"
 

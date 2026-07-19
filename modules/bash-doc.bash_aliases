@@ -12,7 +12,6 @@ alias po="popd"
 
 alias c="clear"
 alias m="more"
-alias j="jobs"
 
 #
 # Csh compatibility:

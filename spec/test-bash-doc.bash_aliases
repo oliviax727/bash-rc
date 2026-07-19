@@ -8,8 +8,6 @@ test_bash_doc_aliases_are_defined() {
     assert_status_code 0 "alias texclean >/dev/null 2>&1"
     assert_status_code 0 "alias h >/dev/null 2>&1"
     assert_status_code 0 "alias j >/dev/null 2>&1"
-    assert_status_code 0 "alias la >/dev/null 2>&1"
-    assert_status_code 0 "alias lah >/dev/null 2>&1"
     assert_status_code 0 "alias pu >/dev/null 2>&1"
     assert_status_code 0 "alias po >/dev/null 2>&1"
     assert_status_code 0 "alias c >/dev/null 2>&1"

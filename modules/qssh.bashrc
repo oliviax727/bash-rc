@@ -72,10 +72,15 @@ function qssh() {
     function qssh-connect() {
         if [[ "$1" =~ ':' ]]; then
             local -a remote_arr
+
+            IFS=' ' read -r -a remote_arr <<< "$(qssh-split-by-colon "${QSSH_HOSTS["$1"]}")"
+            local host_addr="${remote_arr[0]}"
+            local host_path="${remote_arr[1]}"
+            
             IFS=' ' read -r -a remote_arr <<< "$(qssh-split-by-colon "$1")"
             local host_name="${remote_arr[0]}"
-            local host_path="${remote_arr[1]}"
-            ssh -i "${QSSH_CONFIG_DIR}/${host_name}" -t "${QSSH_HOSTS["${host_name}"]}" "source ~/.bashrc; cd ${host_path}; \$SHELL --login"
+
+            ssh -i "${QSSH_CONFIG_DIR}/${host_name}" -t "${host_addr}" "source ~/.bashrc; cd ${host_path}; \$SHELL --login"
         else
             ssh -i "${QSSH_CONFIG_DIR}/$1" "${QSSH_HOSTS["$1"]}"
         fi

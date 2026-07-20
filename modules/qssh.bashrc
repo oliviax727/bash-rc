@@ -96,7 +96,7 @@ function qssh() {
             overwrite_flag="1"
         fi
 
-        [[ "$overwrite_flag" == "1" ]] && shift
+        [[ "${overwrite_flag}" == "1" ]] && shift
 
         local name="$1"
         local addr="$2"
@@ -131,21 +131,28 @@ function qssh() {
         else
 
             local -a remote_arr
-            IFS=' ' read -r -a remote_arr <<< "$(qssh-split-by-colon "$1")"
+            IFS=' ' read -r -a remote_arr <<< "$(qssh-split-by-colon "${addr}")"
             local host_name="${remote_arr[0]}"
             local host_path="${remote_arr[1]}"
 
             # Add remote path to config file. Does not check if it's a valid directory
-            if [[ ! -z "${QSSH_HOSTS["${host_name}:${name}"]}" ]]; then
-                echo -e "${WARNING_TEXT}: The path name already exists in the configuration file!"
-                echo -e "Skipping addition of path to configuration file."
-            elif [[ ! -z "${QSSH_HOSTS["${host_name}"]}" ]] || \
-                  [[ "$(ssh -t "${QSSH_HOSTS["${host_name}"]}" "[[ -d \"${host_path}\" ]]; echo \$?")" == "0" ]]
+            if [[ -n "${QSSH_HOSTS["${host_name}:${name}"]}" ]]; then
+                if [[ "${overwrite_flag}" == "0" ]]; then
+                    echo -e "${WARNING_TEXT}: The path name already exists in the configuration file!"
+                    echo -e "Skipping addition of path to configuration file."
+                else
+                    qssh-remove "${host_name}:${name}"
+                fi
+            fi
+            
+            
+            if [[ -n "${QSSH_HOSTS["${host_name}"]}" ]] && \
+                  ssh -t "${QSSH_HOSTS["${host_name}"]}" "[[ -d \"${host_path}\" ]]"
             then
+                echo "${host_name}:${name},${QSSH_HOSTS["${host_name}"]}:${host_path}" >> "${QSSH_CONFIG_FILE}"
+            else
                 echo -e "${ERROR_TEXT:-ERROR}: Remote directory doesn't exist on host!"
                 echo -e "Skipping addition of path to configuration file."
-            else
-                echo "${host_name}:${name},${addr}" >> "${QSSH_CONFIG_FILE}"
             fi
 
         fi
@@ -270,9 +277,6 @@ function qssh() {
         echo "help                   Access the help menu"
         echo "=================================="
         echo "Options:"
-        echo "-n --name              Generic alphanumeric name field"
-        echo "-t --to                File destination, local CWD if none provided"
-        echo "-f --from              File origin, local CWD if none provided"
         echo "-o --force --overwrite Overwite any existing name setting or overwrite config file"
         echo "=================================="
         echo "Notes:"

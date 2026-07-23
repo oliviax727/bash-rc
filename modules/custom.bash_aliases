@@ -60,3 +60,6 @@ function clean-snaps() {
         LANG=en_US.UTF-8 snap list --all | awk 'NR > 1 && $6 == "disabled" {print $1, $3}'
     )
 }
+
+# Disk usage aliases
+alias dus='du . -h --max-depth=1 | sort -h'

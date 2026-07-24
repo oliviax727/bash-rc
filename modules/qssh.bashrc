@@ -229,6 +229,8 @@ function qssh() {
 
         scp "$@" "${from_file}" "${to_file}"
     }
+
+    alias qscp='qssh-scp'
     
     # Copy an ssh key to clipboard
     function qssh-get-key() {

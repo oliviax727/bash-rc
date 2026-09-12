@@ -104,8 +104,8 @@ function terminal_colour(){
         echo "Available Colours:"
         echo "Default:    --basic --blank"
         echo "Monochrome: --green --blue --yellow"
-        echo "Pride:      --bi --trans --bi-old --demi --gay --pride"
-        echo "Political:  --aneco --ancom --anfem"
+        echo "Pride:      --bi --trans --bi-old --demi --gay --pride --leb"
+        echo "Political:  --aneco --ancom --anfem --anarchy"
         echo "=================================="
     elif [[ $1 == "--bi" ]]; then
         export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;220;10;120m\]\u@\[\e[38;2;180;100;180m\]\h:\[\e[38;2;75;120;255m\]$CWD\[\033[01;00m\]\$ '
@@ -131,10 +131,14 @@ function terminal_colour(){
         export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;229;0;0m\]\u\[\e[38;2;255;141;0m\]@\[\e[38;2;255;238;0m\]\h\[\e[38;2;2;129;33m\]:\[\e[38;2;0;76;255m\]$CWD\[\e[38;2;119;0;136m\]\$\[\033[01;00m\] '
     elif [[ $1 == "--demi" ]]; then
         export PS1='\[\e[38;2;127;127;127m\]${debian_chroot:+($debian_chrooreset}\[\e[38;2;185;185;185m\]\u\[\e[38;2;255;170;203m\]@\[\e[38;2;255;255;255m\]\h\[\e[38;2;255;170;203m\]:\[\e[38;2;185;185;185m\]$CWD\[\e[38;2;127;127;127m\]\$\[\033[01;00m\] '
+    elif [[ $1 == "--leb" ]]; then
+        export PS1='\[\e[38;2;213;45;07m\]${debian_chroot:+($debian_chrooreset}\[\e[38;2;239;118;39m\]\u\[\e[38;2;255;154;86m\]@\[\e[38;2;255;255;255m\]\h\[\e[38;2;209;98;164m\]:\[\e[38;2;181;86;144m\]$CWD\[\e[38;2;163;2;98m\]\$\[\033[01;00m\] '
     elif [[ $1 == "--aneco" ]]; then
         export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;4;221;33m\]\u@\h\[\033[01;00m\]:\[\e[38;2;100;100;100m\]$CWD\[\033[01;00m\]\$ '
     elif [[ $1 == "--anfem" ]]; then
         export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;136;0;144m\]\u@\h\[\033[01;00m\]:\[\e[38;2;100;100;100m\]$CWD\[\033[01;00m\]\$ '
+    elif [[ $1 == "--anarchy" ]]; then
+        export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;100;100;100m\]\u@\h\[\033[01;00m\]:\[\e[38;2;255;255;255m\]$CWD\[\033[01;00m\]\$ '
     else
         echo "$1 is not a valid option. Here's the help menu:"
         terminal_colour --help

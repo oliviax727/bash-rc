@@ -34,7 +34,7 @@ if [[ -n "${BASHRC_TEST_MODE:-}" ]] && [[ "${BASHRC_TEST_MODE}" -eq 1 ]]; then
 fi
 
 # Order of the profiles matter!
-profile_substrings=( "delll" "Sirius" "setonix" "tooarrana" "nid" "MacBook" "test" )
+profile_substrings=( "delll" "surface" "Sirius" "setonix" "tooarrana" "nid" "MacBook" "test" )
 
 # Structure of a profile file:
 # Other code:    runs on load

@@ -20,4 +20,4 @@ export PYLINT_VENV_PATH=.venv:.virtualenv
 export PYTHONPATH=/usr/bin/python3:$PWD/.venv/bin/python3
 
 # Clipboard
-alias "cc=xclip -selection clipboard"
+alias cc="xclip -selection clipboard"

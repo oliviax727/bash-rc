@@ -62,4 +62,5 @@ function clean-snaps() {
 }
 
 # Disk usage aliases
-alias dus='du . -h --max-depth=1 | sort -h'
+alias duh='du . -h --max-depth=1 | sort -h'
+alias dus='du . -sh'

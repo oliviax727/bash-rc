@@ -8,7 +8,7 @@ profile_rc() { :; }
 
 profile_exit() {
     # Fallback to trans colours
-    terminal_colour --anarchy
+    terminal_colour --trans
 
     local static_hostname=""
     local os_name=""
@@ -27,11 +27,11 @@ profile_exit() {
     fi
 
     # If LM use aneco colours
-    if  [[ "$os_name" =~ .*"Linux Mint".* ]]
+    if  [[ "$os_name" =~ .*"Arch".* ]]
     then
-        terminal_colour --aneco
+        terminal_colour --demi
     fi
 
-    alias boot-manj='admiral boot -r sda2 -e sda1'
-    alias boot-mint='admiral boot -r sdb3 -e sdb2'
+    alias boot-arch='admiral boot -r sda3 -e sda1'
+    alias boot-steam='admiral boot -r sda6 -e sda4'
 }

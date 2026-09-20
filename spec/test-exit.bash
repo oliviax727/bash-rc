@@ -15,6 +15,10 @@ test_exit_sources_without_error_or_output() {
         printf '%s\n' "$1" >> "$TEST_EXIT_LOG_FILE"
     }
 
+    term_col() {
+        :
+    }
+
     local output
     output="$(source ../exit.bash 2>&1)"
 

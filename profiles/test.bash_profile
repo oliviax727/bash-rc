@@ -26,5 +26,5 @@ profile_exit() {
     # shellcheck disable=SC1090
     . "${BASHRC_PATH}/test/test_exit.bash"
 
-    export PS1="[test] ${PS1}"
+    export PS1="[$(whoami)] ${PS1}"
 }

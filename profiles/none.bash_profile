@@ -3,7 +3,7 @@
 profile_enter() {
 
     if [ "$BASH_PROFILE" == "none" ]; then
-        printf '%s\n' "${INFORMATION_TEXT:-INFO}: No .bashrc profile recognised!"
+        echo -e "${INFORMATION_TEXT}: No .bashrc profile recognised!\n"
     fi
 
 }

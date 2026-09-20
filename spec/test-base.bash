@@ -15,6 +15,11 @@ prepare_base_harness() {
 
     cp ../test/test_profile.bash_profile "$root/profiles/test.bash_profile"
 
+    cat > "$root/profiles.csv" <<'EOF'
+uname,cname,tname,tcolor,fname
+test,Test,test,basic,test
+EOF
+
     cat > "$root/profiles/none.bash_profile" <<'EOF'
 profile_enter() { :; }
 profile_alias() { :; }

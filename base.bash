@@ -45,7 +45,7 @@ if [[ -n "${PROFILE_NAMES["$username"]}" ]]; then
     IFS=: read -ra PROFILE_DATA <<< "${PROFILE_NAMES["$username"]}"
     # shellcheck disable=SC1090
     . "${BASHRC_PATH}/profiles/${PROFILE_DATA[3]}.bash_profile"
-    export BASH_PROFILE="${PROFILE_DATA[3]}.bash_profile"
+    export BASH_PROFILE="${PROFILE_DATA[3]}"
 fi
 
 profile_enter

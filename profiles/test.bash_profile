@@ -26,7 +26,5 @@ profile_exit() {
     # shellcheck disable=SC1090
     . "${BASHRC_PATH}/test/test_exit.bash"
 
-    terminal_colour --basic
-
     export PS1="[test] ${PS1}"
 }

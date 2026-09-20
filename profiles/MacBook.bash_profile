@@ -23,6 +23,4 @@ profile_enter() {
     alias update-brew='brew update && brew outdated && brew upgrade && brew cleanup'
 }
 
-profile_exit() {
-    terminal_colour --pride
-}
+profile_exit() { :; }

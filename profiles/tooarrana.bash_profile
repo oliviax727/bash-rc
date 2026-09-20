@@ -20,6 +20,4 @@ profile_rc() {
     export LD_LIBRARY_PATH="/fred/oz113/owalters/gsl-2.8/lib:$LD_LIBRARY_PATH"
 }
 
-profile_exit() {
-    terminal_colour --anfem
-}
+profile_exit() { :; }

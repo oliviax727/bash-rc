@@ -6,16 +6,16 @@ This document describes the startup and maintenance work involved in this reposi
 
 ### 1. Entry
 
-Load sequence:
+Loading sequence:
 
 1. `BASHRC_PATH` is expected to point at this repository.
 2. `enter.bash` is sourced first.
-3. Hostname is detected (`scutil`, `hostnamectl`, then `hostname` as fallback).
+3. Username is retrieved using `whoami`
 4. If `BASHRC_TEST_MODE=1`, profile selection is forced to `test`.
 
 ### 2. Profiles
 
-Profiles live in `profiles/*.bash_profile` and are selected by hostname substring in-order.
+Profiles live in `profiles/*.bash_profile` and are selected by the corresponding entry in `profiles.csv`.
 
 `profiles/none.bash_profile` is always sourced first as the baseline.
 

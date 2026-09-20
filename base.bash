@@ -16,25 +16,19 @@ export BASHRC_PATH=""
 
 # Various operating systems use different hostnames, attempt each one
 
-if command -v scutil >/dev/null 2>&1; then
-    device_name="$(scutil --get ComputerName)" # MacOS
-    export device_name
-elif command -v hostnamectl >/dev/null 2>&1 && [[ -d /run/systemd/system ]]; then
-    device_name="$(hostnamectl --static 2>/dev/null)" # Linux with systemd
-    export device_name
-fi
-
-if [[ -z "$device_name" ]] && command -v hostname >/dev/null 2>&1; then
-    device_name="$(hostname 2>/dev/null)" # Generic fallback
-    export device_name
-fi
+username="$(whoami)"
 
 if [[ -n "${BASHRC_TEST_MODE:-}" ]] && [[ "${BASHRC_TEST_MODE}" -eq 1 ]]; then
-    device_name="test"
+    username="test"
 fi
 
-# Order of the profiles matter!
-profile_substrings=( "envy" "delll" "surface" "Sirius" "setonix" "tooarrana" "nid" "MacBook" "test" )
+# Generate map from csv file
+declare -gA PROFILE_NAMES=()
+
+while IFS=, read -r uname cname tname tcolor fname
+do
+    PROFILE_NAMES["$uname"]="$cname:$tname:$tcolor:$fname"
+done < "${BASHRC_PATH}/profiles.csv"
 
 # Structure of a profile file:
 # Other code:    runs on load
@@ -45,15 +39,14 @@ profile_substrings=( "envy" "delll" "surface" "Sirius" "setonix" "tooarrana" "ni
 . "${BASHRC_PATH}/profiles/none.bash_profile"
 
 export BASH_PROFILE="none"
+export PROFILE_DATA=()
 
-for profile in "${profile_substrings[@]}"; do
-    if [[ "$device_name" =~ .*"$profile".* ]]; then
-        # shellcheck disable=SC1090
-        . "${BASHRC_PATH}/profiles/${profile}.bash_profile"
-        export BASH_PROFILE="${profile}"
-        break
-    fi
-done
+if [[ -n "${PROFILE_NAMES["$username"]}" ]]; then
+    IFS=: read -ra PROFILE_DATA <<< "${PROFILE_NAMES["$username"]}"
+    # shellcheck disable=SC1090
+    . "${BASHRC_PATH}/profiles/${PROFILE_DATA[3]}.bash_profile"
+    export BASH_PROFILE="${PROFILE_DATA[3]}.bash_profile"
+fi
 
 profile_enter
 

@@ -12,6 +12,4 @@ profile_alias() { :; }
 
 profile_rc() { :; }
 
-profile_exit() {
-    terminal_colour --basic
-}
+profile_exit() { :; }

@@ -155,7 +155,7 @@ function terminal_colour(){
     elif [[ $1 == "--anfem" ]]; then
         export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;136;0;144m\]\u@\h\[\033[01;00m\]:\[\e[38;2;100;100;100m\]$CWD\[\033[01;00m\]\$ '
     elif [[ $1 == "--antrans" ]]; then
-        export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;0;0;255m\]\u@\h\[\033[01;00m\]:\[\e[38;2;100;100;100m\]$CWD\[\033[01;00m\]\$ '
+        export PS1='${debian_chroot:+($debian_chrooreset}\[\033[31;94m\]\u@\h\[\033[01;00m\]:\[\e[38;2;100;100;100m\]$CWD\[\033[01;00m\]\$ '
     elif [[ $1 == "--anqueer" ]]; then
         export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;255;0;255m\]\u@\h\[\033[01;00m\]:\[\e[38;2;100;100;100m\]$CWD\[\033[01;00m\]\$ '
     elif [[ $1 == "--anarchy" ]]; then

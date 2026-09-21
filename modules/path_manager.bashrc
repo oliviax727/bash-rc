@@ -129,7 +129,7 @@ function terminal_colour(){
     elif [[ $1 == "--earth" ]]; then
         export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;140;70;0m\]\u@\h\[\033[01;00m\]:\[\e[38;2;60;140;40m\]$CWD\[\033[01;00m\]\$ '
     elif [[ $1 == "--bluengold" ]]; then
-        export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;0;0;255m\]\u@\h\[\033[01;00m\]:\[\e[38;2;255;255;0m\]$CWD\[\033[01;00m\]\$ '
+        export PS1='${debian_chroot:+($debian_chrooreset}\[\e[38;2;0;0;255m\]\u@\h\[\033[01;00m\]:\033[31;94m\]$CWD\[\033[01;00m\]\$ '
     
     # Pride
     elif [[ $1 == "--bi" ]]; then

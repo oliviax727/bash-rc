@@ -44,7 +44,7 @@ test_set_cwd_uses_home_shortening_when_twd_disabled() {
     original_home="$HOME"
     temp_home=$(mktemp -d "./path-manager-home.XXXXXX")
     temp_home=$(realpath -m "$temp_home")
-    trap 'cd "$original_pwd"; export HOME="$original_home"; rm -rf "$temp_home"' RETURN
+    trap 'trap - RETURN; cd "$original_pwd"; export HOME="$original_home"; rm -rf "$temp_home"' RETURN
 
     export HOME="$temp_home"
     mkdir -p "$HOME/base/sub"
@@ -64,7 +64,7 @@ test_set_cwd_compresses_prefix_using_quick_jump_vars() {
     original_pwd="$PWD"
     base_dir=$(mktemp -d "./path-manager-qj.XXXXXX")
     base_dir=$(realpath -m "$base_dir")
-    trap 'cd "$original_pwd"; rm -rf "$base_dir"' RETURN
+    trap 'trap - RETURN; cd "$original_pwd"; rm -rf "$base_dir"' RETURN
 
     mkdir -p "$base_dir/project/src"
     export WORKROOT="$base_dir/project"

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 sacct_mem() {
     sacct -j "$1" --format=JobID,JobName%20,MaxRSS,MaxVMSize,Elapsed,Start,End,State,ExitCode --units=G
 }
